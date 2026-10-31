@@ -96,7 +96,7 @@ export function BottomNav() {
 export function Page({ children, nav = true, className }: { children: ReactNode; nav?: boolean; className?: string }) {
   return (
     <>
-      <main className={cx('mx-auto w-full max-w-[480px] px-4 pt-4', nav ? 'pb-24' : 'pb-10', className)}>{children}</main>
+      <main className={cx('mx-auto w-full max-w-[480px] px-4', className?.includes('pt-0') ? '' : 'pt-4', nav ? 'pb-24' : 'pb-10', className)}>{children}</main>
       {nav && <BottomNav />}
     </>
   )
