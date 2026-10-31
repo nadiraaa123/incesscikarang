@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { -webkit-text-size-adjust: 100%; }
+body { @apply bg-cream font-sans text-ink antialiased; }
+@media (min-width: 520px) {
+  /* Di layar lebar, kolom mobile tampil di tengah dengan bingkai tipis */
+  #root { @apply mx-auto min-h-screen max-w-[480px] border-x border-line bg-cream; }
+  body { background: #F1ECE1; }
+}
+button, a { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid #1F5E3B; outline-offset: 2px; }
