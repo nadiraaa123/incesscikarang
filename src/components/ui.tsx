@@ -13,23 +13,13 @@ export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Bool
 /* ---------- Identitas ---------- */
 
 export function Logo({ size = 32 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
-      <rect width="64" height="64" rx="14" fill="#1F5E3B" />
-      <path d="M22 14c0-4 4-6 10-6s10 2 10 6" fill="none" stroke="#FAF7F0" strokeWidth="3" strokeLinecap="round" />
-      <rect x="14" y="16" width="36" height="10" rx="3" fill="#FAF7F0" />
-      <rect x="14" y="29" width="36" height="10" rx="3" fill="#FAF7F0" opacity=".85" />
-      <rect x="14" y="42" width="36" height="10" rx="3" fill="#FAF7F0" opacity=".7" />
-      <circle cx="46" cy="47" r="7" fill="#D99A1E" />
-      <path d="M43 47l2 2 4-4" fill="none" stroke="#1F5E3B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
+  return <img src="/logo.png" width={size} height={size} alt="" aria-hidden="true" className="shrink-0 object-contain" />
 }
 
 export function Brand() {
   return (
     <Link to="/" className="flex items-center gap-2" aria-label="Rantang Terang, ke beranda">
-      <Logo size={30} />
+      <Logo size={38} />
       <span className="text-[17px] font-extrabold tracking-tight text-ink">Rantang <span className="text-leaf">Terang</span></span>
     </Link>
   )

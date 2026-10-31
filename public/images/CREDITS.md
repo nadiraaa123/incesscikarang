@@ -15,5 +15,5 @@ Aturan:
 
 | File | Fotografer | Tautan |
 |---|---|---|
-| hero.jpg | | |
+| hero.jpg | [ISI: fotografer/media + tautan sumber]. Dipotong agar hanya menampilkan ompreng, tanpa wajah siswa. | |
 | menu.jpg | | |
