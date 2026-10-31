@@ -93,7 +93,7 @@ export function FotoAtauIlustrasi({ src, alt, fallback, className, kredit }: { s
   return (
     <figure className={cx('relative overflow-hidden', className)}>
       {gagal ? fallback : <img src={src} alt={alt} onError={() => setGagal(true)} className="h-full w-full object-cover" />}
-      {!gagal && kredit && <figcaption className="absolute bottom-1.5 right-2 rounded bg-black/40 px-1.5 text-[10px] text-white">{kredit}</figcaption>}
+      {!gagal && kredit && <figcaption className="absolute right-2 top-2 rounded bg-black/45 px-1.5 text-[10px] text-white">{kredit}</figcaption>}
     </figure>
   )
 }
