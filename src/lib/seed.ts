@@ -1,4 +1,5 @@
 import type { DB, Menu, MenuItem, PoinLog, Riwayat } from './types'
+import { SEKOLAH_ASLI, WILAYAH } from './sekolah-asli'
 import { lastSchoolDay, monthsBack, schoolDaysBefore } from './date'
 
 /**
@@ -112,45 +113,47 @@ export function buatSeed(): DB {
   })
 
   return {
-    versi: 1,
+    versi: 2,
+    wilayah: WILAYAH,
     sppg: [
-      { id: 'SPPG-DEMO-01', nama: 'SPPG Tarogong 01', kab: 'Kab. Garut', alamat: 'Jl. Contoh Raya No. 12, Tarogong Kidul' },
-      { id: 'SPPG-DEMO-02', nama: 'SPPG Garut Kota 02', kab: 'Kab. Garut', alamat: 'Jl. Contoh Pasundan No. 5, Garut Kota' },
+      { id: 'SPPG-DEMO-01', nama: 'SPPG Uji Coba 01', kab: 'Wilayah uji coba', alamat: 'Alamat contoh' },
+      { id: 'SPPG-DEMO-02', nama: 'SPPG Uji Coba 02', kab: 'Wilayah uji coba', alamat: 'Alamat contoh' },
     ],
     sekolah: [
-      { id: 'sdn2-tarogong', nama: 'SDN 2 Tarogong Kidul', npsn: '2021xxxx', jenjang: 'SD', kab: 'Kab. Garut', kec: 'Tarogong Kidul', sppgId: 'SPPG-DEMO-01', siswa: 312, akunTerdaftar: 180, pelaporAktifSeed: 121, tertibCatat: true },
-      { id: 'sdn3-haurpanggung', nama: 'SDN 3 Haurpanggung', npsn: '2021xxxx', jenjang: 'SD', kab: 'Kab. Garut', kec: 'Tarogong Kidul', sppgId: 'SPPG-DEMO-01', siswa: 280, akunTerdaftar: 160, pelaporAktifSeed: 118, tertibCatat: true },
-      { id: 'smpn1-garut', nama: 'SMPN 1 Garut', npsn: '2020xxxx', jenjang: 'SMP', kab: 'Kab. Garut', kec: 'Garut Kota', sppgId: 'SPPG-DEMO-02', siswa: 640, akunTerdaftar: 290, pelaporAktifSeed: 152, tertibCatat: false },
-      { id: 'sdn1-sukagalih', nama: 'SDN 1 Sukagalih', npsn: '2021xxxx', jenjang: 'SD', kab: 'Kab. Garut', kec: 'Tarogong Kidul', sppgId: 'SPPG-DEMO-01', siswa: 254, akunTerdaftar: 150, pelaporAktifSeed: 64, tertibCatat: false },
+      ...SEKOLAH_ASLI,
+      { id: 'uji-sd-1', nama: 'SD Uji Coba 1', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', sppgId: 'SPPG-DEMO-01', siswa: 312, akunTerdaftar: 180, pelaporAktifSeed: 121, tertibCatat: true },
+      { id: 'uji-sd-2', nama: 'SD Uji Coba 2', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', sppgId: 'SPPG-DEMO-01', siswa: 280, akunTerdaftar: 160, pelaporAktifSeed: 118, tertibCatat: true },
+      { id: 'uji-smp-1', nama: 'SMP Uji Coba 1', npsn: 'contoh', jenjang: 'SMP', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', sppgId: 'SPPG-DEMO-02', siswa: 640, akunTerdaftar: 290, pelaporAktifSeed: 152, tertibCatat: false },
+      { id: 'uji-sd-3', nama: 'SD Uji Coba 3', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', sppgId: 'SPPG-DEMO-01', siswa: 254, akunTerdaftar: 150, pelaporAktifSeed: 64, tertibCatat: false },
     ],
     menu,
     pengguna: [
-      { id: 'u-ortu', username: 'demo-ortu-sd', pin: '123456', nama: 'Raka (orang tua)', peran: 'ortu', schoolId: 'sdn2-tarogong', kelas: '4A', anak: 'Dinda', demo: true },
-      { id: 'u-siswa', username: 'demo-siswa-smp', pin: '123456', nama: 'Dimas', peran: 'siswa', schoolId: 'smpn1-garut', kelas: '8B', waOrtu: '0812xxxx', demo: true },
-      { id: 'u-guru', username: 'demo-guru', pin: '123456', nama: 'Bu Ratna', peran: 'guru', schoolId: 'sdn2-tarogong', demo: true },
-      { id: 'u-petugas-sd', username: 'PTG-SD-01', pin: '123456', nama: 'Pak Anton', peran: 'petugas', schoolId: 'sdn2-tarogong', demo: true },
-      { id: 'u-petugas-smp', username: 'PTG-SMP-01', pin: '123456', nama: 'Bu Sari', peran: 'petugas', schoolId: 'smpn1-garut', demo: true },
+      { id: 'u-ortu', username: 'demo-ortu-sd', pin: '123456', nama: 'Raka (orang tua)', peran: 'ortu', schoolId: 'uji-sd-1', kelas: '4A', anak: 'Dinda', demo: true },
+      { id: 'u-siswa', username: 'demo-siswa-smp', pin: '123456', nama: 'Dimas', peran: 'siswa', schoolId: 'uji-smp-1', kelas: '8B', waOrtu: '0812xxxx', demo: true },
+      { id: 'u-guru', username: 'demo-guru', pin: '123456', nama: 'Bu Ratna', peran: 'guru', schoolId: 'uji-sd-1', demo: true },
+      { id: 'u-petugas-sd', username: 'PTG-SD-01', pin: '123456', nama: 'Pak Anton', peran: 'petugas', schoolId: 'uji-sd-1', demo: true },
+      { id: 'u-petugas-smp', username: 'PTG-SMP-01', pin: '123456', nama: 'Bu Sari', peran: 'petugas', schoolId: 'uji-smp-1', demo: true },
       { id: 'u-sppg', username: 'SPPG-DEMO-01', pin: '123456', nama: 'Ibu Dewi (ahli gizi)', peran: 'sppg', sppgId: 'SPPG-DEMO-01', demo: true },
     ],
     undangan: [
-      { kode: 'KLS-SD2TK-4A', schoolId: 'sdn2-tarogong', kelas: '4A', tipe: 'kelas' },
-      { kode: 'KLS-SMP1G-8B', schoolId: 'smpn1-garut', kelas: '8B', tipe: 'kelas' },
-      { kode: 'STF-SD2TK', schoolId: 'sdn2-tarogong', tipe: 'staf' },
+      { kode: 'KLS-UJISD1-4A', schoolId: 'uji-sd-1', kelas: '4A', tipe: 'kelas' },
+      { kode: 'KLS-UJISMP1-8B', schoolId: 'uji-smp-1', kelas: '8B', tipe: 'kelas' },
+      { kode: 'STF-UJISD1', schoolId: 'uji-sd-1', tipe: 'staf' },
     ],
     laporan: [
-      { id: 'l-x1', userId: 'warga-1', schoolId: 'sdn2-tarogong', kelas: '4A', tanggal: hariIni, waktu: '13.20', kondisi: 'aman', gejala: [], demo: true },
-      { id: 'l-x2', userId: 'warga-2', schoolId: 'sdn2-tarogong', kelas: '5B', tanggal: hariIni, waktu: '13.45', kondisi: 'keluhan', gejala: ['Sakit perut'], jumlah: 1, catatan: 'Anak mengeluh perut kembung setelah makan siang.', demo: true },
-      { id: 'l-x3', userId: 'warga-3', schoolId: 'sdn2-tarogong', kelas: '4A', tanggal: hariIni, waktu: '14.05', kondisi: 'keluhan', gejala: ['Mual atau muntah'], jumlah: 1, demo: true },
-      { id: 'l-x4', userId: 'warga-4', schoolId: 'smpn1-garut', kelas: '8B', tanggal: k1, waktu: '13.10', kondisi: 'keluhan', gejala: ['Pusing'], jumlah: 1, catatan: 'Lauk terasa asam.', demo: true },
-      { id: 'l-ortu-0', userId: 'u-ortu', schoolId: 'sdn2-tarogong', kelas: '4A', tanggal: k1, waktu: '15.40', kondisi: 'aman', gejala: [], demo: true },
-      { id: 'l-ortu-1', userId: 'u-ortu', schoolId: 'sdn2-tarogong', kelas: '4A', tanggal: k2, waktu: '15.35', kondisi: 'aman', gejala: [], demo: true },
-      { id: 'l-ortu-2', userId: 'u-ortu', schoolId: 'sdn2-tarogong', kelas: '4A', tanggal: k3, waktu: '15.50', kondisi: 'keluhan', gejala: ['Sakit perut'], jumlah: 1, demo: true },
+      { id: 'l-x1', userId: 'warga-1', schoolId: 'uji-sd-1', kelas: '4A', tanggal: hariIni, waktu: '13.20', kondisi: 'aman', gejala: [], demo: true },
+      { id: 'l-x2', userId: 'warga-2', schoolId: 'uji-sd-1', kelas: '5B', tanggal: hariIni, waktu: '13.45', kondisi: 'keluhan', gejala: ['Sakit perut'], jumlah: 1, catatan: 'Anak mengeluh perut kembung setelah makan siang.', demo: true },
+      { id: 'l-x3', userId: 'warga-3', schoolId: 'uji-sd-1', kelas: '4A', tanggal: hariIni, waktu: '14.05', kondisi: 'keluhan', gejala: ['Mual atau muntah'], jumlah: 1, demo: true },
+      { id: 'l-x4', userId: 'warga-4', schoolId: 'uji-smp-1', kelas: '8B', tanggal: k1, waktu: '13.10', kondisi: 'keluhan', gejala: ['Pusing'], jumlah: 1, catatan: 'Lauk terasa asam.', demo: true },
+      { id: 'l-ortu-0', userId: 'u-ortu', schoolId: 'uji-sd-1', kelas: '4A', tanggal: k1, waktu: '15.40', kondisi: 'aman', gejala: [], demo: true },
+      { id: 'l-ortu-1', userId: 'u-ortu', schoolId: 'uji-sd-1', kelas: '4A', tanggal: k2, waktu: '15.35', kondisi: 'aman', gejala: [], demo: true },
+      { id: 'l-ortu-2', userId: 'u-ortu', schoolId: 'uji-sd-1', kelas: '4A', tanggal: k3, waktu: '15.50', kondisi: 'keluhan', gejala: ['Sakit perut'], jumlah: 1, demo: true },
     ],
     penilaian: [
-      { id: 'r-x1', userId: 'warga-5', schoolId: 'sdn2-tarogong', tanggal: k1, bintang: 2, aspek: { rasa: 3, porsi: 2, kesegaran: 3, variasi: 2 }, catatan: 'Buah jeruk diganti biskuit kemasan, porsi nasi terlihat kurang.', demo: true },
-      { id: 'r-x2', userId: 'warga-6', schoolId: 'sdn2-tarogong', tanggal: k2, bintang: 4, aspek: { rasa: 4, porsi: 4, kesegaran: 4, variasi: 3 }, catatan: 'Sayur masih hangat, anak suka. Mohon variasi lauk ditambah.', demo: true },
-      { id: 'r-x3', userId: 'warga-7', schoolId: 'smpn1-garut', tanggal: k1, bintang: 2, aspek: { rasa: 2, porsi: 3, kesegaran: 2, variasi: 3 }, catatan: 'Lauk ikan sudah agak bau saat dibuka jam 12.', demo: true },
-      { id: 'r-x4', userId: 'warga-8', schoolId: 'sdn3-haurpanggung', tanggal: k2, bintang: 5, aspek: { rasa: 5, porsi: 4, kesegaran: 5, variasi: 4 }, catatan: 'Menu lengkap dan tepat waktu.', demo: true },
+      { id: 'r-x1', userId: 'warga-5', schoolId: 'uji-sd-1', tanggal: k1, bintang: 2, aspek: { rasa: 3, porsi: 2, kesegaran: 3, variasi: 2 }, catatan: 'Buah jeruk diganti biskuit kemasan, porsi nasi terlihat kurang.', demo: true },
+      { id: 'r-x2', userId: 'warga-6', schoolId: 'uji-sd-1', tanggal: k2, bintang: 4, aspek: { rasa: 4, porsi: 4, kesegaran: 4, variasi: 3 }, catatan: 'Sayur masih hangat, anak suka. Mohon variasi lauk ditambah.', demo: true },
+      { id: 'r-x3', userId: 'warga-7', schoolId: 'uji-smp-1', tanggal: k1, bintang: 2, aspek: { rasa: 2, porsi: 3, kesegaran: 2, variasi: 3 }, catatan: 'Lauk ikan sudah agak bau saat dibuka jam 12.', demo: true },
+      { id: 'r-x4', userId: 'warga-8', schoolId: 'uji-sd-2', tanggal: k2, bintang: 5, aspek: { rasa: 5, porsi: 4, kesegaran: 5, variasi: 4 }, catatan: 'Menu lengkap dan tepat waktu.', demo: true },
     ],
     tanggapan: [
       { id: 't-1', targetId: 'r-x1', sppgId: 'SPPG-DEMO-01', jenis: 'perbaiki', isi: 'Stok jeruk dari pemasok terlambat. Mulai besok buah diganti pisang lokal, porsi nasi ditimbang ulang per baki.', waktu: `${k1} 18.20` },
@@ -158,10 +161,10 @@ export function buatSeed(): DB {
     foto: [],
     poin,
     riwayat: [
-      ...riwayatSekolah('sdn2-tarogong', 4.2, 6),
-      ...riwayatSekolah('sdn3-haurpanggung', 4.5, 4),
-      ...riwayatSekolah('smpn1-garut', 3.8, 9),
-      ...riwayatSekolah('sdn1-sukagalih', 4.0, 5),
+      ...riwayatSekolah('uji-sd-1', 4.2, 6),
+      ...riwayatSekolah('uji-sd-2', 4.5, 4),
+      ...riwayatSekolah('uji-smp-1', 3.8, 9),
+      ...riwayatSekolah('uji-sd-3', 4.0, 5),
     ],
     peringatan: [],
     rujukan: [],

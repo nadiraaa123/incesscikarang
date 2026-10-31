@@ -52,12 +52,12 @@ Di halaman **Masuk** tersedia tombol sekali ketuk untuk setiap akun.
 | Petugas sekolah SMP | `PTG-SMP-01` |
 | Mitra SPPG | `SPPG-DEMO-01` |
 
-Kode undangan untuk mencoba pendaftaran: `KLS-SD2TK-4A` (orang tua SD), `KLS-SMP1G-8B` (siswa SMP), `STF-SD2TK` (guru/petugas).
+Kode undangan untuk mencoba pendaftaran: `KLS-UJISD1-4A` (orang tua SD), `KLS-UJISMP1-8B` (siswa SMP), `STF-UJISD1` (guru/petugas).
 Data tersimpan di browser; tombol **Reset data demo** ada di halaman *Tentang & Data*.
 
 ### Alur demo (±2 menit)
 
-1. Beranda (tanpa login) → cari "Tarogong" → buka **dasbor SDN 2 Tarogong Kidul**.
+1. Beranda (tanpa login) → **Cari sekolah** → pilih wilayah (mis. Kab. Sidoarjo) → buka sekolah asli (data warga masih kosong) → pilih wilayah **Uji coba aplikasi** → buka **SD Uji Coba 1**.
 2. Masuk sebagai **Orang tua SD** → kirim laporan sore "Ada keluhan: Sakit perut" + penilaian menu → poin bertambah di **Saya**.
 3. Masuk sebagai **Mitra SPPG** → buka Kotak masukan → **Beri tanggapan**.
 4. Kembali ke dasbor sekolah publik → tanggapan SPPG tampil di samping laporan asli.
@@ -83,12 +83,19 @@ Data tersimpan di browser; tombol **Reset data demo** ada di halaman *Tentang & 
 - [ ] Foto asli berlisensi bebas untuk hero (lihat `public/images/CREDITS.md`)
 - [ ] Uji pengguna dengan orang tua, guru, dan siswa
 
+## Data sekolah & wilayah
+
+- **Wilayah asli** diurutkan dari korban dugaan keracunan MBG terbesar 2026 menurut pemberitaan resmi: Kab. Grobogan (803), Kota Semarang (707), Kab. Sidoarjo (512). Sumber tercantum di aplikasi.
+- **Sekolah asli** (nama + NPSN) diambil dari Data Referensi Kemendikdasmen, di `src/lib/sekolah-asli.ts`. Sekolah asli **tidak** diberi laporan/rating karangan; datanya mulai kosong.
+- **Sekolah uji coba** ("SD Uji Coba 1", dst.) fiktif dan berisi data contoh supaya alur bisa dicoba juri.
+- Menambah sekolah: salin NPSN, nama, alamat, kecamatan dari https://referensi.data.kemendikdasmen.go.id ke `sekolah-asli.ts`. Jangan menebak NPSN.
+
 ## Struktur folder
 
 ```
 src/
   components/   ui.tsx (komponen dasar), mbg.tsx (menu, perjalanan, masukan), forms.tsx (laporan & penilaian)
-  lib/          db.ts (data & aturan bisnis), seed.ts (data contoh), auth.ts, sources.ts (sumber statistik), date.ts, types.ts
+  lib/          db.ts (data & aturan bisnis), seed.ts (data contoh), sekolah-asli.ts (wilayah & sekolah asli), auth.ts, sources.ts (sumber statistik), date.ts, types.ts
   pages/        Home, Schools, SchoolDetail, About, Auth (Masuk/Daftar), AppHome (ortu/siswa/guru/petugas), Profile, Sppg, Rujukan
 supabase/       schema.sql
 docs/screenshots/  tangkapan layar mobile & desktop

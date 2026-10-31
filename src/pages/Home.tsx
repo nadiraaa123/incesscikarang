@@ -26,7 +26,7 @@ export default function Home() {
   const user = useSesi()
   const nav = useNavigate()
   const [q, setQ] = useState('')
-  const contoh = sekolahById(d, 'sdn2-tarogong')!
+  const contoh = sekolahById(d, 'uji-sd-1')!
   const menu = menuHariIni(d, contoh.sppgId)
   const masukan = daftarMasukan(d).slice(0, 2)
   const peringkat = peringkatSekolah(d).slice(0, 3)
@@ -48,7 +48,7 @@ export default function Home() {
               role="search"
             >
               <Search size={19} className="shrink-0 text-muted" />
-              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cari nama sekolah" className="h-full min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-muted" aria-label="Cari sekolah" />
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cari nama sekolah atau NPSN" className="h-full min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-muted" aria-label="Cari sekolah" />
               <button type="submit" className="h-10 rounded-xl bg-leaf px-4 text-sm font-bold text-white">Cari</button>
             </form>
           </div>

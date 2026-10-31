@@ -1,6 +1,14 @@
 export type Peran = 'ortu' | 'siswa' | 'guru' | 'petugas' | 'sppg'
-export type Jenjang = 'PAUD' | 'SD' | 'SMP' | 'SMA' | 'SLB' | 'Pesantren'
+export type Jenjang = 'PAUD' | 'SD' | 'SMP' | 'SMA' | 'SLB' | 'Pesantren' | 'MTs'
 export type Kategori = 'Makanan pokok' | 'Lauk pauk' | 'Sayur' | 'Buah' | 'Susu'
+
+export interface Wilayah {
+  id: string
+  nama: string
+  provinsi: string
+  uji?: boolean
+  kejadian?: { korban: number; ringkas: string; tanggal: string; sumber: string; url: string }
+}
 
 export interface Sekolah {
   id: string
@@ -9,7 +17,11 @@ export interface Sekolah {
   jenjang: Jenjang
   kab: string
   kec: string
-  sppgId: string
+  wilayahId: string
+  asli?: boolean
+  alamat?: string
+  sumberUrl?: string
+  sppgId?: string
   siswa: number
   akunTerdaftar: number
   pelaporAktifSeed: number
@@ -147,6 +159,7 @@ export interface Rujukan {
 
 export interface DB {
   versi: number
+  wilayah: Wilayah[]
   sekolah: Sekolah[]
   sppg: Sppg[]
   menu: Menu[]

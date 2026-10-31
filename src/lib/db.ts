@@ -7,7 +7,7 @@ import { lastSchoolDay, monthKey, monthsBack, nowTime, schoolDaysBefore, today }
  * Lapisan data. Saat ini memakai localStorage + data contoh agar aplikasi langsung berjalan tanpa backend.
  * Skema yang sama tersedia untuk Supabase di /supabase/schema.sql (tahap berikutnya).
  */
-const KEY = 'rantang-terang-db-v1'
+const KEY = 'rantang-terang-db-v2'
 let state: DB = load()
 const listeners = new Set<() => void>()
 
@@ -16,7 +16,7 @@ function load(): DB {
     const raw = localStorage.getItem(KEY)
     if (raw) {
       const parsed = JSON.parse(raw) as DB
-      if (parsed.versi === 1) return parsed
+      if (parsed.versi === 2) return parsed
     }
   } catch { /* abaikan */ }
   return buatSeed()
@@ -54,10 +54,11 @@ const uid = (p: string) => `${p}-${Date.now().toString(36)}${Math.random().toStr
 
 export const hariOperasional = () => lastSchoolDay()
 
-export const menuHariIni = (d: DB, sppgId: string, tanggal = hariOperasional()) =>
-  d.menu.find((m) => m.sppgId === sppgId && m.tanggal === tanggal)
+export const menuHariIni = (d: DB, sppgId: string | undefined, tanggal = hariOperasional()) =>
+  sppgId ? d.menu.find((m) => m.sppgId === sppgId && m.tanggal === tanggal) : undefined
 
 export const sekolahById = (d: DB, id?: string) => d.sekolah.find((s) => s.id === id)
+export const wilayahById = (d: DB, id?: string) => d.wilayah.find((w) => w.id === id)
 export const sppgById = (d: DB, id?: string) => d.sppg.find((s) => s.id === id)
 
 /** Statistik bulan berjalan: data dasar (riwayat) + penilaian/keluhan baru dari pengguna. */
@@ -98,11 +99,12 @@ export function partisipasi(d: DB, s: Sekolah) {
       .map((x) => x.userId),
   ).size
   const aktif = Math.min(s.akunTerdaftar, s.pelaporAktifSeed + pelaporBaru)
-  return { aktif, terdaftar: s.akunTerdaftar, persen: Math.round((aktif / s.akunTerdaftar) * 100) }
+  const terdaftar = Math.max(s.akunTerdaftar, pelaporBaru)
+  return { aktif: Math.min(terdaftar, s.pelaporAktifSeed + pelaporBaru), terdaftar, persen: terdaftar ? Math.round((Math.min(terdaftar, s.pelaporAktifSeed + pelaporBaru) / terdaftar) * 100) : 0 }
 }
 
 export const peringkatSekolah = (d: DB) =>
-  [...d.sekolah].map((s) => ({ s, ...partisipasi(d, s) })).sort((a, b) => b.persen - a.persen)
+  [...d.sekolah].map((s) => ({ s, ...partisipasi(d, s) })).filter((x) => x.terdaftar > 0).sort((a, b) => b.persen - a.persen)
 
 export interface Masukan {
   id: string

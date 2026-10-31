@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom'
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts'
-import { AlertTriangle, ImageOff, TrendingDown, TrendingUp, Minus } from 'lucide-react'
-import { Bintang, Card, Chip, Demo, H2, Kosong, Page, TopBar } from '../components/ui'
+import { AlertTriangle, ImageOff, TrendingDown, TrendingUp, Minus, ExternalLink, UserPlus } from 'lucide-react'
+import { Bintang, Card, Chip, Demo, H2, Kosong, LinkButton, Page, Sumber, TopBar } from '../components/ui'
 import { ItemMasukan, KartuMenu, Perjalanan } from '../components/mbg'
-import { daftarMasukan, hariOperasional, menuHariIni, partisipasi, peringkatSekolah, sekolahById, sppgById, statBulanIni, tren, useDB, cekAmbang } from '../lib/db'
+import { daftarMasukan, hariOperasional, menuHariIni, partisipasi, peringkatSekolah, sekolahById, sppgById, statBulanIni, tren, useDB, cekAmbang, wilayahById } from '../lib/db'
 import { fmtBulan, fmtTanggal } from '../lib/date'
 
 export default function SchoolDetail() {
@@ -21,7 +21,9 @@ export default function SchoolDetail() {
   const fotoHariIni = d.foto.filter((f) => f.schoolId === s.id && f.tanggal === hariOperasional() && f.jenis !== 'siswa')
   const amb = cekAmbang(d, s.id)
   const peringatan = d.peringatan.find((w) => w.schoolId === s.id && w.tanggal === hariOperasional())
-  const maxSebaran = Math.max(...st.sebaran)
+  const maxSebaran = Math.max(1, ...st.sebaran)
+  const w = wilayahById(d, s.wilayahId)
+  const adaData = st.total > 0
 
   return (
     <>
@@ -30,8 +32,11 @@ export default function SchoolDetail() {
         <nav className="mb-2 text-xs text-muted" aria-label="Breadcrumb">Beranda › Sekolah › <span className="text-ink">{s.nama}</span></nav>
         <Card>
           <h1 className="text-xl font-extrabold text-ink">{s.nama}</h1>
-          <p className="text-sm text-muted">{s.jenjang} · Kec. {s.kec}, {s.kab} · {s.siswa} siswa</p>
-          <p className="mt-2 text-sm text-ink">Dilayani <span className="font-semibold">{sppg?.nama}</span></p>
+          <p className="text-sm text-muted">{s.asli ? `NPSN ${s.npsn} · ` : ''}{s.jenjang} · Kec. {s.kec}, {s.kab}{s.siswa ? ` · ${s.siswa} siswa` : ''}</p>
+          {s.alamat && <p className="mt-1 text-sm text-muted">{s.alamat}</p>}
+          <p className="mt-2 text-sm text-ink">{sppg ? <>Dilayani <span className="font-semibold">{sppg.nama}</span></> : <span className="text-muted">SPPG penyedia belum tercatat di Rantang Terang</span>}</p>
+          {s.asli && s.sumberUrl && <a href={s.sumberUrl} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-leaf">Data resmi Kemendikdasmen <ExternalLink size={12} /></a>}
+          {!s.asli && <p className="mt-2"><Demo /></p>}
           <p className="mt-1 text-xs text-muted">{fmtTanggal(hariOperasional())}</p>
         </Card>
 
@@ -40,6 +45,24 @@ export default function SchoolDetail() {
             <AlertTriangle size={18} className="mt-0.5 shrink-0 text-brick" />
             <p><span className="font-bold">Perlu perhatian:</span> {amb.jumlah} laporan keluhan dari {amb.kelas} kelas hari ini. Sudah diperiksa petugas sekolah dan diteruskan ke SPPG serta puskesmas setempat.</p>
           </div>
+        )}
+
+        {w?.kejadian && (
+          <Card className="mt-3 border-brick/30 bg-brick-soft/40">
+            <p className="text-sm font-bold text-ink">Konteks wilayah: {w.kejadian.korban.toLocaleString('id-ID')} korban dugaan keracunan MBG di {w.nama}</p>
+            <p className="mt-0.5 text-[13px] leading-relaxed text-ink">{w.kejadian.ringkas} ({w.kejadian.tanggal})</p>
+            <Sumber sumber={w.kejadian.sumber} url={w.kejadian.url} />
+            <p className="mt-1 text-[11.5px] text-muted">Informasi wilayah, bukan berarti sekolah ini terlibat.</p>
+          </Card>
+        )}
+
+        {!adaData && (
+          <Card className="mt-3 text-center">
+            <UserPlus className="mx-auto text-leaf" />
+            <p className="mt-2 font-bold text-ink">Belum ada laporan warga untuk sekolah ini</p>
+            <p className="mt-1 text-sm text-muted">Orang tua, siswa, dan guru bisa mulai melapor setelah mendapat kode undangan dari wali kelas atau kepala sekolah.</p>
+            <LinkButton to="/daftar" className="mt-3 w-full">Jadi pelapor pertama</LinkButton>
+          </Card>
         )}
 
         <H2>Hari ini</H2>
@@ -63,6 +86,7 @@ export default function SchoolDetail() {
           </Card>
         </div>
 
+        {adaData && (<>
         <H2>Penilaian bulan ini</H2>
         <Card>
           <div className="flex items-center gap-4">
@@ -131,6 +155,8 @@ export default function SchoolDetail() {
           <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-cream"><div className="h-full rounded-full bg-leaf" style={{ width: `${p.persen}%` }} /></div>
           {s.tertibCatat && <p className="mt-3 text-sm font-semibold text-leaf">Badge sekolah: Tertib Catat (20 hari pencatatan lengkap)</p>}
         </Card>
+
+        </>)}
 
         <H2>Masukan & tanggapan SPPG</H2>
         <div className="space-y-3">
