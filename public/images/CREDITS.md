@@ -15,5 +15,5 @@ Aturan:
 
 | File | Fotografer | Tautan |
 |---|---|---|
-| hero.jpg | ANTARA FOTO (watermark asli dipertahankan). Foto berita berhak cipta: ganti dengan foto sendiri atau minta izin sebelum Final Submission. | [ISI tautan sumber] |
+| hero.jpg | [ISI: sumber/fotografer foto deretan ompreng]. Pastikan berlisensi bebas atau milik sendiri. | [ISI tautan] |
 | menu.jpg | | |
