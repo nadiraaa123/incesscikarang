@@ -15,5 +15,5 @@ Aturan:
 
 | File | Fotografer | Tautan |
 |---|---|---|
-| hero.jpg | [ISI: fotografer/media + tautan sumber]. Dipotong agar hanya menampilkan ompreng, tanpa wajah siswa. | |
+| hero.jpg | ANTARA FOTO (watermark asli dipertahankan). Foto berita berhak cipta: ganti dengan foto sendiri atau minta izin sebelum Final Submission. | [ISI tautan sumber] |
 | menu.jpg | | |

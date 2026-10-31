@@ -38,7 +38,7 @@ export default function Home() {
       <Page className="pt-0">
         {/* HERO */}
         <section className="-mx-4">
-          <FotoAtauIlustrasi src="/images/hero.jpg" alt="Makan siang Makan Bergizi Gratis di sekolah" fallback={<HeroScene className="h-full w-full" />} className="h-[210px] w-full bg-leaf" />
+          <FotoAtauIlustrasi src="/images/hero.jpg" alt="Petugas dapur SPPG menata ompreng makan bergizi gratis" kredit="Foto: ANTARA FOTO" fallback={<HeroScene className="h-full w-full" />} className="h-[210px] w-full bg-leaf" />
           <div className="relative -mt-6 rounded-t-3xl bg-cream px-4 pt-6">
             <h1 className="text-[28px] font-extrabold leading-[1.15] tracking-tight text-ink">Pantau makan bergizi gratis di sekolahmu</h1>
             <p className="mt-2 text-[15px] leading-relaxed text-muted">Lihat menu dan perjalanan makanan, laporkan kondisi anak, dan pantau tanggapan dapur secara terbuka.</p>
