@@ -9,7 +9,7 @@ Tema: *Designing Digital Futures – Powering Public Transparency* · Subtema: *
 
 > Proyek independen, bukan layanan resmi pemerintah. Data sekolah, akun, laporan, dan foto pada versi ini adalah **contoh untuk demo**. Statistik nasional di Beranda memakai data resmi beserta sumber dan tanggalnya.
 
-**Demo online:** _[isi link Vercel setelah deploy]_
+**Demo online:** _[(https://rantangterang.vercel.app/)]_
 
 ---
 
