@@ -170,13 +170,12 @@ export default function Home() {
         </div>
 
         {/* PARTISIPASI */}
-        <Judul kecil="Bulan ini" aksi={<Demo />}>Sekolah paling aktif</Judul>
+        <Judul kecil="Bulan ini" aksi={<Demo />}>Partisipasi warga</Judul>
         <Card className="p-0">
           <ul className="divide-y divide-line">
-            {peringkat.map(({ s, persen }, i) => (
+            {peringkat.map(({ s, persen }) => (
               <li key={s.id}>
                 <Link to={`/sekolah/${s.id}`} className="flex items-center gap-3 px-4 py-3 hover:bg-cream">
-                  <span className={cx('grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm font-extrabold', i === 0 ? 'bg-sun text-white' : 'bg-cream text-ink')}>{i + 1}</span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[15px] font-semibold text-ink">{s.nama}</p>
                     <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-cream"><div className="h-full rounded-full bg-leaf" style={{ width: `${persen}%` }} /></div>

@@ -51,7 +51,7 @@ export const WILAYAH: Wilayah[] = [
 ]
 
 const ref = (npsn: string) => `https://referensi.data.kemdikbud.go.id/residu/satuanpendidikan/detail/${npsn}`
-const asli = (s: Omit<Sekolah, 'asli' | 'siswa' | 'akunTerdaftar' | 'pelaporAktifSeed' | 'tertibCatat' | 'id' | 'sumberUrl'>): Sekolah => ({
+const asli = (s: Omit<Sekolah, 'asli' | 'siswa' | 'akunTerdaftar' | 'pelaporAktifSeed' | 'id' | 'sumberUrl'>): Sekolah => ({
   ...s,
   id: `npsn-${s.npsn}`,
   asli: true,
@@ -59,7 +59,6 @@ const asli = (s: Omit<Sekolah, 'asli' | 'siswa' | 'akunTerdaftar' | 'pelaporAkti
   siswa: 0,
   akunTerdaftar: 0,
   pelaporAktifSeed: 0,
-  tertibCatat: false,
 })
 
 export const SEKOLAH_ASLI: Sekolah[] = [

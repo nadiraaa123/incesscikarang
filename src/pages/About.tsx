@@ -1,7 +1,7 @@
 import { ExternalLink } from 'lucide-react'
 import { Card, Footer, H2, Page, TopBar, Button } from '../components/ui'
 import { DAFTAR_SUMBER } from '../lib/sources'
-import { LEVEL, resetDemo } from '../lib/db'
+import { resetDemo } from '../lib/db'
 
 export default function About() {
   return (
@@ -32,23 +32,20 @@ export default function About() {
           </ul>
         </Card>
 
-        <H2>Aturan poin</H2>
+        <H2>Aturan pelaporan</H2>
         <Card className="p-0">
-          <table className="w-full text-sm">
-            <tbody className="divide-y divide-line">
-              {[
-                ['Lapor kondisi harian', '+10', '1× per hari sekolah'],
-                ['Penilaian menu', '+5', '1× per hari'],
-                ['Foto sebelum makan (siswa)', '+5', '1× per hari'],
-                ['Dua foto & cocokkan menu (petugas)', '+10', '1× per hari'],
-                ['Laporan terbukti tidak benar', '−20', '3× = akun dibekukan'],
-              ].map(([a, p, b]) => (
-                <tr key={a}><td className="px-4 py-2.5 text-ink">{a}<p className="text-xs text-muted">{b}</p></td><td className={p.startsWith('−') ? 'px-4 text-right font-bold text-brick' : 'px-4 text-right font-bold text-leaf'}>{p}</td></tr>
-              ))}
-            </tbody>
-          </table>
+          <ul className="divide-y divide-line text-sm">
+            {[
+              ['Lapor kondisi', '1 kali per hari sekolah untuk setiap akun.'],
+              ['Penilaian menu', '1 kali per hari. Masukan tertulis tampil di dasbor publik tanpa nama.'],
+              ['Peringatan', 'Muncul bila keluhan ≥3 laporan, ≥2% siswa, dari ≥2 kelas, lalu diperiksa petugas sekolah sebelum diteruskan.'],
+              ['Tanggapan SPPG', 'SPPG dapat menanggapi, tetapi tidak dapat mengubah atau menghapus laporan asli.'],
+              ['Laporan tidak sesuai', 'Petugas dapat menandai laporan yang tidak sesuai. Laporan tetap tersimpan sebagai jejak.'],
+            ].map(([a, b]) => (
+              <li key={a} className="px-4 py-3"><p className="font-semibold text-ink">{a}</p><p className="text-muted">{b}</p></li>
+            ))}
+          </ul>
         </Card>
-        <p className="mt-2 text-sm text-muted">Laporan gejala tidak diberi poin tambahan agar tidak ada dorongan melebih-lebihkan keluhan. Poin tidak dapat ditukar uang atau hadiah. Level: {LEVEL.map((l) => `${l.nama} (≥${l.min})`).join(' → ')}.</p>
 
         <H2><span id="etika">Etika data</span></H2>
         <Card>

@@ -1,4 +1,4 @@
-import type { DB, Menu, MenuItem, Pengguna, PoinLog, Riwayat } from './types'
+import type { DB, Menu, MenuItem, Pengguna, Riwayat } from './types'
 import { SEKOLAH_ASLI, WILAYAH } from './sekolah-asli'
 import { lastSchoolDay, monthsBack, schoolDaysBefore } from './date'
 import { buatSeedPengaduan } from './seed-pengaduan'
@@ -97,22 +97,6 @@ export function buatSeed(): DB {
   }
 
   const [k1, k2, k3] = lalu
-  const poin: PoinLog[] = []
-  const tambahPoin = (p: Omit<PoinLog, 'id'>) => poin.push({ ...p, id: `p-${poin.length + 1}` })
-  // riwayat poin akun demo orang tua (contoh)
-  const hariOrtu = schoolDaysBefore(hariIni, 9)
-  hariOrtu.forEach((t, i) => {
-    tambahPoin({ userId: 'u-ortu', kode: 'LAPOR_KONDISI', poin: 10, ref: `l-ortu-${i}`, waktu: `${t} 15.40`, ket: 'Lapor kondisi harian' })
-    if (i % 2 === 0) tambahPoin({ userId: 'u-ortu', kode: 'PENILAIAN', poin: 5, ref: `r-ortu-${i}`, waktu: `${t} 15.42`, ket: 'Penilaian menu' })
-  })
-  tambahPoin({ userId: 'u-ortu', kode: 'TIDAK_BENAR', poin: -20, ref: 'l-ortu-8', waktu: `${hariOrtu[8]} 19.00`, ket: 'Laporan ditandai tidak sesuai oleh petugas' })
-  // siswa & petugas
-  lalu.slice(0, 4).forEach((t, i) => {
-    tambahPoin({ userId: 'u-siswa', kode: 'FOTO_SISWA', poin: 5, waktu: `${t} 10.25`, ket: 'Foto sebelum makan' })
-    tambahPoin({ userId: 'u-siswa', kode: 'LAPOR_KONDISI', poin: 10, ref: `l-siswa-${i}`, waktu: `${t} 13.50`, ket: 'Lapor kondisi harian' })
-    tambahPoin({ userId: 'u-petugas-sd', kode: 'CATAT_PETUGAS', poin: 10, waktu: `${t} 10.00`, ket: 'Dua foto & cocokkan menu' })
-  })
-
   return {
     versi: 3,
     wilayah: WILAYAH,
@@ -122,10 +106,10 @@ export function buatSeed(): DB {
     ],
     sekolah: [
       ...SEKOLAH_ASLI,
-      { id: 'uji-sd-1', nama: 'SD Uji Coba 1', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-01', siswa: 312, akunTerdaftar: 180, pelaporAktifSeed: 121, tertibCatat: true },
-      { id: 'uji-sd-2', nama: 'SD Uji Coba 2', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-01', siswa: 280, akunTerdaftar: 160, pelaporAktifSeed: 118, tertibCatat: true },
-      { id: 'uji-smp-1', nama: 'SMP Uji Coba 1', npsn: 'contoh', jenjang: 'SMP', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-02', siswa: 640, akunTerdaftar: 290, pelaporAktifSeed: 152, tertibCatat: false },
-      { id: 'uji-sd-3', nama: 'SD Uji Coba 3', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-01', siswa: 254, akunTerdaftar: 150, pelaporAktifSeed: 64, tertibCatat: false },
+      { id: 'uji-sd-1', nama: 'SD Uji Coba 1', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-01', siswa: 312, akunTerdaftar: 180, pelaporAktifSeed: 121 },
+      { id: 'uji-sd-2', nama: 'SD Uji Coba 2', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-01', siswa: 280, akunTerdaftar: 160, pelaporAktifSeed: 118 },
+      { id: 'uji-smp-1', nama: 'SMP Uji Coba 1', npsn: 'contoh', jenjang: 'SMP', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-02', siswa: 640, akunTerdaftar: 290, pelaporAktifSeed: 152 },
+      { id: 'uji-sd-3', nama: 'SD Uji Coba 3', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-01', siswa: 254, akunTerdaftar: 150, pelaporAktifSeed: 64 },
     ],
     menu,
     pengguna: [
@@ -161,7 +145,6 @@ export function buatSeed(): DB {
       { id: 't-1', targetId: 'r-x1', sppgId: 'SPPG-DEMO-01', jenis: 'perbaiki', isi: 'Stok jeruk dari pemasok terlambat. Mulai besok buah diganti pisang lokal, porsi nasi ditimbang ulang per baki.', waktu: `${k1} 18.20` },
     ],
     foto: [],
-    poin,
     riwayat: [
       ...riwayatSekolah('uji-sd-1', 4.2, 6),
       ...riwayatSekolah('uji-sd-2', 4.5, 4),

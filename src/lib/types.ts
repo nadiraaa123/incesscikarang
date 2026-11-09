@@ -27,7 +27,6 @@ export interface Sekolah {
   siswa: number
   akunTerdaftar: number
   pelaporAktifSeed: number
-  tertibCatat: boolean
 }
 
 export interface Sppg {
@@ -130,16 +129,6 @@ export interface Foto {
   cocok?: 'sesuai' | 'tidak'
 }
 
-export interface PoinLog {
-  id: string
-  userId: string
-  kode: 'LAPOR_KONDISI' | 'PENILAIAN' | 'FOTO_SISWA' | 'CATAT_PETUGAS' | 'TIDAK_BENAR'
-  poin: number
-  ref?: string
-  waktu: string
-  ket: string
-}
-
 export interface Riwayat {
   schoolId: string
   bulan: string
@@ -239,7 +228,6 @@ export interface DB {
   penilaian: Penilaian[]
   tanggapan: Tanggapan[]
   foto: Foto[]
-  poin: PoinLog[]
   riwayat: Riwayat[]
   peringatan: Peringatan[]
   rujukan: Rujukan[]

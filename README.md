@@ -9,7 +9,7 @@ Tema: *Designing Digital Futures – Powering Public Transparency* · Subtema: *
 
 > Proyek independen, bukan layanan resmi pemerintah. Data sekolah, akun, laporan, dan foto pada versi ini adalah **contoh untuk demo**. Statistik nasional di Beranda memakai data resmi beserta sumber dan tanggalnya.
 
-**Demo online:** _[(https://rantangterang.vercel.app/)]_
+**Demo online:** https://rantangterang.vercel.app/
 
 ---
 
@@ -59,14 +59,14 @@ Data tersimpan di browser; tombol **Reset data demo** ada di halaman *Tentang & 
 ### Alur demo (±2 menit)
 
 1. Beranda (tanpa login) → **Cari sekolah** → pilih wilayah (mis. Kab. Sidoarjo) → buka sekolah asli (data warga masih kosong) → pilih wilayah **Uji coba aplikasi** → buka **SD Uji Coba 1**.
-2. Masuk sebagai **Orang tua SD** → kirim laporan sore "Ada keluhan: Sakit perut" + penilaian menu → poin bertambah di **Saya**.
+2. Masuk sebagai **Orang tua SD** → kirim laporan sore "Ada keluhan: Sakit perut" + penilaian menu → laporan muncul di **Saya** dengan status "Tercatat".
 3. Masuk sebagai **Mitra SPPG** → buka Kotak masukan → **Beri tanggapan**.
 4. Kembali ke dasbor sekolah publik → tanggapan SPPG tampil di samping laporan asli.
 
 ## Progres saat ini (First Draft)
 
 **Sudah berjalan**
-- [x] Beranda publik: statistik nasional bersumber (resmi & independen berdampingan), cara kerja, masukan terbaru + tanggapan SPPG, peringkat partisipasi
+- [x] Beranda publik: statistik nasional bersumber (resmi & independen berdampingan), cara kerja, masukan terbaru + tanggapan SPPG, partisipasi warga
 - [x] Cari sekolah & dasbor sekolah publik: menu & gizi (diinput SPPG), perjalanan makanan, foto dari sekolah, bintang bulan ini + naik/turun, sebaran 1–5, nilai per aspek, tren 6 bulan, keluhan, partisipasi, masukan & tanggapan
 - [x] Pendaftaran 3 langkah berbasis kode undangan (sekolah, jenjang, kelas, dan peran ditentukan kode) + masuk dengan nomor WhatsApp/ID + PIN (kunci 15 menit setelah 5 kali salah)
 - [x] Orang tua: menu & perjalanan makanan, laporan kondisi sore (terpisah dari penilaian menu), banner arahan ke faskes, kartu rujukan 24 jam yang bisa dicabut
@@ -74,13 +74,14 @@ Data tersimpan di browser; tombol **Reset data demo** ada di halaman *Tentang & 
 - [x] Guru: laporan kondisi + jumlah siswa terdampak, dihitung tanpa nama
 - [x] Petugas sekolah: dua foto (diterima & saat makan), cocokkan menu, peringatan ambang keluhan (≥3 laporan, ≥2% siswa, ≥2 kelas) yang diperiksa dulu sebelum diteruskan
 - [x] Mitra SPPG: input menu & gizi, kotak masukan, tanggapan "Benar, kami perbaiki" / "Info tidak sesuai" (laporan asli tidak bisa diubah)
-- [x] Gamifikasi: poin (dari `poin_log`), 4 level, 4 badge, streak hari sekolah, peringkat partisipasi sekolah, riwayat poin termasuk penalti
+- [x] Profil berisi riwayat laporan & penilaian beserta status tanggapan SPPG
 - [x] Privasi: dasbor publik hanya agregat, foto dikompres & digambar ulang di perangkat (EXIF terbuang)
 
 **Rencana berikutnya (3–10 November)**
 - [ ] Migrasi ke Supabase (Auth, database, Storage foto) memakai `supabase/schema.sql`
 - [ ] Tautan pantau orang tua untuk siswa SMP/SMA via WhatsApp
-- [ ] Badge publik "Dapur Responsif" untuk SPPG
+- [ ] Moderasi laporan: label urgensi, deteksi laporan ganda, antrean verifikasi petugas
+- [ ] Eskalasi berjenjang (sekolah → SPPG → dinas) dengan batas waktu
 - [ ] Foto asli berlisensi bebas untuk hero (lihat `public/images/CREDITS.md`)
 - [ ] Uji pengguna dengan orang tua, guru, dan siswa
 
@@ -127,7 +128,7 @@ Uji skema & RLS di PostgreSQL lokal (tanpa Supabase): `PGHOST=... PGPORT=... bas
 - PIN 6 digit sebagai kata sandi Supabase lemah untuk produksi; pertimbangkan OTP WhatsApp.
 - `daftar_akun` bisa dipanggil tanpa login (wajib kode undangan valid) dan belum dibatasi laju; kode undangan sebaiknya dibuat acak dan bisa dicabut.
 - Tujuh akun demo (PIN `123456`) aktif di situs live — hapus atau ganti PIN-nya sebelum dipakai warga sungguhan.
-- Fitur lama (menu, penilaian, poin, foto petugas, rujukan) masih memakai data lokal/demo, juga di mode online.
+- Fitur lama (menu, penilaian, laporan sore, foto petugas, rujukan) masih memakai data lokal/demo, juga di mode online.
 
 ## Data sekolah & wilayah
 

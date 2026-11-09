@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { LogOut, MessageSquareReply, Award, ClipboardList, Utensils, MessagesSquare } from 'lucide-react'
+import { LogOut, MessageSquareReply, Clock, ClipboardList, Utensils, MessagesSquare } from 'lucide-react'
 import { Button, Card, Chip, H2, Kosong, Memuat, Page, Pesan, Toast, TopBar, cx } from '../components/ui'
 import { KartuLaporan } from '../components/laporan'
 import { repo, useKueri } from '../lib/repo'
@@ -61,7 +61,7 @@ export default function Sppg() {
         )}
 
         {tab === 'masukan' && <>
-        <p className="mt-4 flex items-center gap-1 text-xs text-muted"><Award size={13} className="text-sun" /> Tanggapi semua masukan dalam 24 jam selama sebulan untuk badge publik “Dapur Responsif”.</p>
+        <p className="mt-4 flex items-center gap-1 text-xs text-muted"><Clock size={13} className="text-sun" /> Semua tanggapan tampil di dasbor publik dan tidak menghapus masukan asli.</p>
         <H2>Kotak masukan menu</H2>
         <div className="space-y-3">
           {masukan.map((m) => (

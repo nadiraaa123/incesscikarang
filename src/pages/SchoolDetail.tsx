@@ -3,7 +3,7 @@ import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianG
 import { AlertTriangle, ImageOff, TrendingDown, TrendingUp, Minus, ExternalLink, UserPlus } from 'lucide-react'
 import { Bintang, Card, Chip, Demo, H2, Kosong, LinkButton, Page, Sumber, TopBar } from '../components/ui'
 import { ItemMasukan, KartuMenu, Perjalanan } from '../components/mbg'
-import { daftarMasukan, hariOperasional, menuHariIni, partisipasi, peringkatSekolah, sekolahById, sppgById, statBulanIni, tren, useDB, cekAmbang, wilayahById } from '../lib/db'
+import { daftarMasukan, hariOperasional, menuHariIni, partisipasi, sekolahById, sppgById, statBulanIni, tren, useDB, cekAmbang, wilayahById } from '../lib/db'
 import { fmtBulan, fmtTanggal } from '../lib/date'
 
 export default function SchoolDetail() {
@@ -16,7 +16,6 @@ export default function SchoolDetail() {
   const st = statBulanIni(d, s.id)
   const data = tren(d, s.id).map((t) => ({ ...t, label: fmtBulan(t.bulan) }))
   const p = partisipasi(d, s)
-  const rank = peringkatSekolah(d).findIndex((x) => x.s.id === s.id) + 1
   const masukan = daftarMasukan(d, { schoolId: s.id })
   const fotoHariIni = d.foto.filter((f) => f.schoolId === s.id && f.tanggal === hariOperasional() && f.jenis !== 'siswa')
   const amb = cekAmbang(d, s.id)
@@ -150,10 +149,8 @@ export default function SchoolDetail() {
               <p className="text-3xl font-extrabold tabular-nums text-ink">{p.persen}%</p>
               <p className="text-sm text-muted">{p.aktif} dari {p.terdaftar} akun aktif melapor bulan ini</p>
             </div>
-            <Chip jenis="info">Peringkat {rank} di {s.kab}</Chip>
           </div>
           <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-cream"><div className="h-full rounded-full bg-leaf" style={{ width: `${p.persen}%` }} /></div>
-          {s.tertibCatat && <p className="mt-3 text-sm font-semibold text-leaf">Badge sekolah: Tertib Catat (20 hari pencatatan lengkap)</p>}
         </Card>
 
         </>)}

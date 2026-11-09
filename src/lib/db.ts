@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react'
-import type { DB, LaporanKondisi, Penilaian, PoinLog, Pengguna, Riwayat, Sekolah } from './types'
+import type { DB, LaporanKondisi, Penilaian, Pengguna, Riwayat, Sekolah } from './types'
 import { buatSeed, FASKES_DEMO, KESEHATAN_DEMO } from './seed'
 import { buatSeedPengaduan } from './seed-pengaduan'
 import { lastSchoolDay, monthKey, monthsBack, nowTime, schoolDaysBefore, today } from './date'
@@ -161,53 +161,6 @@ export function cekAmbang(d: DB, schoolId: string, tanggal = hariOperasional()) 
   return { jumlah: keluhan.length, anak, kelas, persen: +persen.toFixed(1), terlampaui: keluhan.length >= 3 && persen >= 2 && kelas >= 2 }
 }
 
-/* ---------- Gamifikasi ---------- */
-
-export const LEVEL = [
-  { nama: 'Pemula', min: 0 },
-  { nama: 'Pemantau', min: 50 },
-  { nama: 'Penjaga Piring', min: 200 },
-  { nama: 'Penjaga Teladan', min: 500 },
-]
-
-export function profilPoin(d: DB, userId: string) {
-  const log = d.poin.filter((p) => p.userId === userId).sort((a, b) => b.waktu.localeCompare(a.waktu))
-  const total = log.reduce((a, p) => a + p.poin, 0)
-  let idx = 0
-  LEVEL.forEach((l, i) => { if (total >= l.min) idx = i })
-  const next = LEVEL[idx + 1]
-  return { log, total, level: LEVEL[idx].nama, next: next?.nama, kurang: next ? next.min - total : 0, progres: next ? (total - LEVEL[idx].min) / (next.min - LEVEL[idx].min) : 1 }
-}
-
-export function streak(d: DB, userId: string) {
-  const hari = new Set(d.laporan.filter((l) => l.userId === userId).map((l) => l.tanggal))
-  hari.forEach(() => {})
-  const acuan = hariOperasional()
-  let n = hari.has(acuan) ? 1 : 0
-  for (const t of schoolDaysBefore(acuan, 30)) {
-    if (hari.has(t)) n++
-    else break
-  }
-  return n
-}
-
-export function badge(d: DB, user: Pengguna) {
-  const nLapor = d.laporan.filter((l) => l.userId === user.id).length
-  const nNilai = d.penilaian.filter((p) => p.userId === user.id).length + d.poin.filter((p) => p.userId === user.id && p.kode === 'PENILAIAN').length
-  const s = sekolahById(d, user.schoolId)
-  const st = streak(d, user.id)
-  return [
-    { kode: 'pertama', nama: 'Pelapor Pertama', ket: 'Kirim laporan pertamamu', terbuka: nLapor > 0, progres: nLapor > 0 ? 'Terbuka' : '0/1' },
-    { kode: 'rutin', nama: 'Rutin 5 Hari', ket: 'Lapor 5 hari sekolah berturut-turut', terbuka: st >= 5, progres: `${Math.min(st, 5)}/5` },
-    { kode: 'teliti', nama: 'Penilai Teliti', ket: 'Beri 20 penilaian menu', terbuka: nNilai >= 20, progres: `${Math.min(nNilai, 20)}/20` },
-    { kode: 'tertib', nama: 'Sekolah Tertib Catat', ket: 'Petugas sekolahmu mencatat 20 hari lengkap', terbuka: !!s?.tertibCatat, progres: s?.tertibCatat ? 'Terbuka' : 'Terkunci' },
-  ]
-}
-
-function beriPoin(d: DB, p: Omit<PoinLog, 'id' | 'waktu'>) {
-  d.poin.push({ ...p, id: uid('p'), waktu: `${today()} ${nowTime()}` })
-}
-
 /* ---------- Aksi ---------- */
 
 export const sudahLaporHariIni = (d: DB, userId: string) => d.laporan.some((l) => l.userId === userId && l.tanggal === hariOperasional())
@@ -215,29 +168,27 @@ export const sudahNilaiHariIni = (d: DB, userId: string) => d.penilaian.some((p)
 export const fotoSiswaHariIni = (d: DB, userId: string) => d.foto.find((f) => f.userId === userId && f.jenis === 'siswa' && f.tanggal === hariOperasional())
 
 export function kirimLaporan(user: Pengguna, data: Pick<LaporanKondisi, 'kondisi' | 'gejala' | 'jumlah' | 'catatan'>) {
-  let hasil: { ok: boolean; pesan: string; poin: number } = { ok: false, pesan: '', poin: 0 }
+  let hasil: { ok: boolean; pesan: string } = { ok: false, pesan: '' }
   mutate((d) => {
-    if (sudahLaporHariIni(d, user.id)) { hasil = { ok: false, pesan: 'Kamu sudah melapor kondisi hari ini.', poin: 0 }; return }
+    if (sudahLaporHariIni(d, user.id)) { hasil = { ok: false, pesan: 'Kamu sudah melapor kondisi hari ini.' }; return }
     const id = uid('l')
     d.laporan.push({ id, userId: user.id, schoolId: user.schoolId!, kelas: user.kelas, tanggal: hariOperasional(), waktu: nowTime(), ...data })
-    beriPoin(d, { userId: user.id, kode: 'LAPOR_KONDISI', poin: 10, ref: id, ket: 'Lapor kondisi harian' })
     const amb = cekAmbang(d, user.schoolId!)
     if (amb.terlampaui && !d.peringatan.some((p) => p.schoolId === user.schoolId && p.tanggal === hariOperasional())) {
       d.peringatan.push({ id: uid('w'), schoolId: user.schoolId!, tanggal: hariOperasional(), status: 'menunggu' })
     }
-    hasil = { ok: true, pesan: 'Laporan terkirim.', poin: 10 }
+    hasil = { ok: true, pesan: 'Laporan terkirim.' }
   })
   return hasil
 }
 
 export function kirimPenilaian(user: Pengguna, data: Pick<Penilaian, 'bintang' | 'aspek' | 'catatan'>) {
-  let hasil = { ok: false, pesan: '', poin: 0 }
+  let hasil = { ok: false, pesan: '' }
   mutate((d) => {
-    if (sudahNilaiHariIni(d, user.id)) { hasil = { ok: false, pesan: 'Kamu sudah menilai menu hari ini.', poin: 0 }; return }
+    if (sudahNilaiHariIni(d, user.id)) { hasil = { ok: false, pesan: 'Kamu sudah menilai menu hari ini.' }; return }
     const id = uid('r')
     d.penilaian.push({ id, userId: user.id, schoolId: user.schoolId!, tanggal: hariOperasional(), ...data })
-    beriPoin(d, { userId: user.id, kode: 'PENILAIAN', poin: 5, ref: id, ket: 'Penilaian menu' })
-    hasil = { ok: true, pesan: 'Penilaian terkirim.', poin: 5 }
+    hasil = { ok: true, pesan: 'Penilaian terkirim.' }
   })
   return hasil
 }
@@ -246,18 +197,12 @@ export function simpanFoto(user: Pengguna, jenis: 'penerimaan' | 'makan' | 'sisw
   mutate((d) => {
     d.foto = d.foto.filter((f) => !(f.schoolId === user.schoolId && f.tanggal === hariOperasional() && f.jenis === jenis && (jenis !== 'siswa' || f.userId === user.id)))
     d.foto.push({ id: uid('f'), schoolId: user.schoolId!, tanggal: hariOperasional(), jenis, userId: user.id, dataUrl })
-    if (jenis === 'siswa' && !d.poin.some((p) => p.userId === user.id && p.kode === 'FOTO_SISWA' && p.waktu.startsWith(today()))) {
-      beriPoin(d, { userId: user.id, kode: 'FOTO_SISWA', poin: 5, ket: 'Foto sebelum makan' })
-    }
   })
 }
 
 export function cocokkanMenu(user: Pengguna, cocok: 'sesuai' | 'tidak') {
   mutate((d) => {
     d.foto.filter((f) => f.schoolId === user.schoolId && f.tanggal === hariOperasional() && f.jenis !== 'siswa').forEach((f) => { f.cocok = cocok })
-    if (!d.poin.some((p) => p.userId === user.id && p.kode === 'CATAT_PETUGAS' && p.waktu.startsWith(today()))) {
-      beriPoin(d, { userId: user.id, kode: 'CATAT_PETUGAS', poin: 10, ket: 'Dua foto & cocokkan menu' })
-    }
   })
 }
 

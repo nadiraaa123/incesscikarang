@@ -8,7 +8,7 @@ import { masukEskalasi, STATUS_AKTIF, labelKategori } from '../lib/pengaduan'
 import { KartuMenu, Perjalanan } from '../components/mbg'
 import { FormKondisi, FormPenilaian, GEJALA } from '../components/forms'
 import { useSesi, keluar, labelPeran } from '../lib/auth'
-import { buatRujukan, cekAmbang, cocokkanMenu, fotoSiswaHariIni, hariOperasional, menuHariIni, profilPoin, sekolahById, simpanFoto, sppgById, streak, tandaiDiperiksa, useDB } from '../lib/db'
+import { buatRujukan, cekAmbang, cocokkanMenu, fotoSiswaHariIni, hariOperasional, menuHariIni, sekolahById, simpanFoto, sppgById, sudahLaporHariIni, tandaiDiperiksa, useDB } from '../lib/db'
 import { fmtTanggal } from '../lib/date'
 import type { Pengguna } from '../lib/types'
 
@@ -34,22 +34,20 @@ export default function AppHome() {
 function Salam({ user }: { user: Pengguna }) {
   const d = useDB()
   const s = sekolahById(d, user.schoolId)
-  const pp = profilPoin(d, user.id)
   return (
     <div>
       <p className="text-xs text-muted">{fmtTanggal(hariOperasional())}</p>
       <h1 className="text-xl font-extrabold text-ink">Halo, {panggilan(user.nama)}</h1>
       <p className="text-sm text-muted">{labelPeran[user.peran]} · {s?.nama}{user.kelas ? ` · Kelas ${user.kelas}` : ''}</p>
-      <Link to="/app/profil" className="mt-3 flex items-center justify-between rounded-xl border border-line bg-white px-4 py-3">
-        <div>
-          <p className="text-xs text-muted">Level</p>
-          <p className="font-bold text-ink">{pp.level} · <span className="tabular-nums">{pp.total}</span> poin</p>
-        </div>
-        <div className="text-right">
-          <p className="text-xs text-muted">Streak</p>
-          <p className="font-bold tabular-nums text-ink">{streak(d, user.id)} hari sekolah</p>
-        </div>
-      </Link>
+      {user.peran !== 'petugas' && (
+        <Link to="/app/profil" className="mt-3 flex items-center justify-between rounded-xl border border-line bg-white px-4 py-3">
+          <div>
+            <p className="text-xs text-muted">Laporan hari ini</p>
+            <p className="font-bold text-ink">{sudahLaporHariIni(d, user.id) ? 'Sudah terkirim' : 'Belum dikirim'}</p>
+          </div>
+          <span className="text-sm font-bold text-leaf">Riwayat laporan</span>
+        </Link>
+      )}
     </div>
   )
 }
@@ -190,7 +188,7 @@ function BerandaSiswa({ user }: { user: Pengguna }) {
                 <Camera size={28} /><span className="mt-2 font-bold">Ketuk untuk memotret makananmu</span><span className="text-xs text-muted">Foto makanan saja, tanpa wajah teman</span>
               </button>
             )}
-            <input ref={ref} type="file" accept="image/*" capture="environment" hidden onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; simpanFoto(user, 'siswa', await kompresFoto(f)); setToast('Foto tersimpan. +5 poin') }} />
+            <input ref={ref} type="file" accept="image/*" capture="environment" hidden onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; simpanFoto(user, 'siswa', await kompresFoto(f)); setToast('Foto tersimpan.') }} />
           </Card>
         </>
       )}
@@ -320,7 +318,7 @@ function BerandaPetugas({ user }: { user: Pengguna }) {
       <Card className="mt-3">
         <p className="text-sm font-bold text-ink">Apakah makanan sesuai menu?</p>
         <div className="mt-2 grid grid-cols-2 gap-2">
-          <Button variant={cocok === 'sesuai' ? 'primary' : 'outline'} disabled={!lengkap} onClick={() => { cocokkanMenu(user, 'sesuai'); setToast('Tercatat sesuai menu. +10 poin') }}>Sesuai</Button>
+          <Button variant={cocok === 'sesuai' ? 'primary' : 'outline'} disabled={!lengkap} onClick={() => { cocokkanMenu(user, 'sesuai'); setToast('Tercatat sesuai menu.') }}>Sesuai</Button>
           <Button variant={cocok === 'tidak' ? 'danger' : 'outline'} disabled={!lengkap} onClick={() => { cocokkanMenu(user, 'tidak'); setToast('Tercatat tidak sesuai. SPPG akan dikabari.') }}>Tidak sesuai</Button>
         </div>
         <p className="mt-2 flex items-center gap-1 text-xs text-muted"><ClipboardList size={13} /> Pekerjaan sekitar 1–2 menit. Rekap ini melindungi sekolah bila ada keluhan. <Demo /></p>

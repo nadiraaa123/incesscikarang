@@ -30,7 +30,7 @@ export function FormKondisi({ user, judul, onDone, disabled }: { user: Pengguna;
 
   const kirim = () => {
     const r = kirimLaporan(user, { kondisi: kondisi!, gejala: kondisi === 'keluhan' ? gejala : [], jumlah: kondisi === 'keluhan' && user.peran === 'guru' ? jumlah : kondisi === 'keluhan' ? 1 : undefined, catatan: catatan.trim() || undefined })
-    onDone(r.ok ? `Laporan terkirim. +${r.poin} poin` : r.pesan)
+    onDone(r.ok ? 'Laporan terkirim. Terima kasih sudah melapor.' : r.pesan)
   }
 
   return (
@@ -76,7 +76,7 @@ export function FormKondisi({ user, judul, onDone, disabled }: { user: Pengguna;
         </label>
       )}
       <Button className="mt-3 w-full" disabled={!kondisi || (kondisi === 'keluhan' && gejala.length === 0)} onClick={kirim}>Kirim laporan kondisi</Button>
-      <p className="mt-2 text-center text-[11.5px] text-muted">+10 poin · 1 kali per hari sekolah. Laporan gejala tidak diberi poin tambahan.</p>
+      <p className="mt-2 text-center text-[11.5px] text-muted">1 kali per hari sekolah. Keluhan dihitung tanpa nama dan diperiksa petugas sekolah sebelum diteruskan.</p>
     </Card>
   )
 }
@@ -113,8 +113,8 @@ export function FormPenilaian({ user, onDone, disabled }: { user: Pengguna; onDo
         ))}
       </div>
       <textarea value={catatan} onChange={(e) => setCatatan(e.target.value.slice(0, 280))} rows={2} placeholder="Masukan untuk SPPG (opsional), misalnya: buah diganti biskuit" className="mt-3 w-full rounded-xl border border-line p-3 text-[15px] outline-none focus:border-leaf" />
-      <Button className="mt-2 w-full" variant={lengkap ? 'primary' : 'primary'} disabled={!lengkap} onClick={() => { const r = kirimPenilaian(user, { bintang, aspek, catatan: catatan.trim() || undefined }); onDone(r.ok ? `Penilaian terkirim. +${r.poin} poin` : r.pesan) }}>Kirim penilaian</Button>
-      <p className="mt-2 text-center text-[11.5px] text-muted">+5 poin · masukan tertulis tampil di dasbor publik tanpa nama dan dapat ditanggapi SPPG.</p>
+      <Button className="mt-2 w-full" variant={lengkap ? 'primary' : 'primary'} disabled={!lengkap} onClick={() => { const r = kirimPenilaian(user, { bintang, aspek, catatan: catatan.trim() || undefined }); onDone(r.ok ? 'Penilaian terkirim. Terima kasih atas masukanmu.' : r.pesan) }}>Kirim penilaian</Button>
+      <p className="mt-2 text-center text-[11.5px] text-muted">1 kali per hari · masukan tertulis tampil di dasbor publik tanpa nama dan dapat ditanggapi SPPG.</p>
     </Card>
   )
 }
