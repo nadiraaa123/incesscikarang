@@ -56,8 +56,7 @@ Kolom: **TC** = timecode · **Peran** · **Visual / aksi pengguna** · **Respons
 
 ## 3. Naskah voice-over
 
-Lihat **`naskah-vo.txt`** (538 kata, dengan timecode per baris). Subtitle `subtitle-id.srt` memakai teks dan waktu yang sama, sehingga dapat diunggah ke YouTube sebagai caption.
-Tempo sudah dicek ≤ 2,7 kata/detik per baris. Rekam per bagian, bukan sekali jalan, lalu tempatkan sesuai timecode.
+Lihat **`naskah-vo.txt`** (v2: 55 baris, 358 kata, gaya storytelling, ≤ 5 suku kata/detik). Subtitle `subtitle-id.srt` dan subtitle di video memakai teks dan waktu yang sama. Kolom *Narasi* di storyboard di atas merangkum isi v1; teks yang berlaku adalah `naskah-vo.txt`. Audio dan lisensi musik: lihat `AUDIO-DAN-LISENSI.md`.
 
 ## 4. Komposisi profil tim
 
@@ -166,7 +165,8 @@ Catatan: Rantang Terang adalah proyek independen, bukan layanan resmi pemerintah
 | Privasi | ✅ | Sekolah fiktif, akun demo, gambar bukti bertanda contoh. Dashboard hanya agregat. SPPG melihat laporan tanpa identitas pelapor. Tidak ada foto anak. |
 | Klaim | ✅ | Tidak ada statistik nasional, skor performa, atau klaim diagnosis/integrasi resmi |
 | Konsistensi angka | ✅ | Nomor RT-261110-0027 dipakai di semua adegan. Dasbor 90 hari: 21 / 16 / 6 / 10 / 63% (6 + 10 = 16; persentase = selesai ÷ terverifikasi). |
-| Narasi & musik | ❌ belum | Harus direkam dan ditambahkan tim |
+| Musik | ✅ | Komposisi orisinal, crossfade, ducking (lihat `AUDIO-DAN-LISENSI.md`) |
+| Narasi | ❌ belum | Naskah v2 dan pipeline mixing siap; suara belum ada |
 
 ## 8. Yang masih harus dikerjakan tim
 

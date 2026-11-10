@@ -1,244 +1,220 @@
 1
-00:00:00,500 --> 00:00:04,600
-Kami adalah Incess Cikarang dari President University.
+00:00:00,600 --> 00:00:04,800
+Halo! Kami Incess Cikarang dari President University.
 
 2
-00:00:05,200 --> 00:00:10,600
-Tim kami terdiri dari Helen Stephanis Simarmata sebagai Business Analyst,
+00:00:05,400 --> 00:00:10,600
+Ada Helen Stephanis Simarmata, Business Analyst kami,
 
 3
-00:00:11,200 --> 00:00:16,600
+00:00:11,400 --> 00:00:16,600
 Dian Theresia Girsang sebagai Project Manager,
 
 4
-00:00:17,200 --> 00:00:22,600
-dan Nadira Khumaira Putri sebagai Frontend & Backend.
+00:00:17,400 --> 00:00:22,600
+dan Nadira Khumaira Putri di bagian Frontend dan Backend.
 
 5
-00:00:23,500 --> 00:00:29,600
-Bersama, kami membangun Rantang Terang untuk Web In Action 2026.
+00:00:23,800 --> 00:00:29,400
+Bersama, kami membangun Rantang Terang.
 
 6
-00:00:30,400 --> 00:00:36,700
-Rantang Terang adalah aplikasi web mobile-first untuk mendukung pemantauan layanan Makan Bergizi Gratis, atau MBG.
+00:00:30,400 --> 00:00:36,800
+Rantang Terang adalah aplikasi web untuk memantau layanan Makan Bergizi Gratis.
 
 7
-00:00:37,000 --> 00:00:41,800
-Orang tua perlu tahu makanan anaknya, dan butuh saluran laporan yang jelas.
+00:00:37,400 --> 00:00:42,000
+Orang tua ingin tahu makanan anaknya, dan tempat melapor yang jelas.
 
 8
-00:00:42,000 --> 00:00:46,800
-Laporan harus ditindaklanjuti, dan publik perlu melihat perkembangannya tanpa data pribadi.
+00:00:42,400 --> 00:00:46,800
+Laporan perlu ditindaklanjuti, dan bisa dipantau publik.
 
 9
-00:00:47,000 --> 00:00:55,200
-Rantang Terang menghubungkan informasi makanan, laporan pengguna, verifikasi petugas, tindak lanjut SPPG atau Satuan Pelayanan Pemenuhan Gizi, dan transparansi publik.
+00:00:47,200 --> 00:00:55,000
+Laporan diverifikasi petugas, lalu ditindaklanjuti SPPG, Satuan Pelayanan Pemenuhan Gizi.
 
 10
 00:00:55,400 --> 00:00:59,800
-Prinsipnya: setiap laporan tercatat, ditindaklanjuti, dan dapat dipantau.
+Setiap laporan tercatat, ditindaklanjuti, dan dapat dipantau.
 
 11
-00:01:00,300 --> 00:01:04,000
-Kita ikuti laporan Raka, akun demo orang tua.
+00:01:00,300 --> 00:01:04,200
+Mari ikuti satu laporan sampai selesai.
 
 12
-00:01:04,100 --> 00:01:08,500
-Di beranda, ia melihat menu hari ini beserta kandungan gizinya,
+00:01:04,400 --> 00:01:08,400
+Raka, seorang orang tua, melihat menu anaknya hari ini,
 
 13
-00:01:08,600 --> 00:01:13,600
-serta perjalanan makanan dari dapur sampai dimakan siswa.
+00:01:08,800 --> 00:01:13,200
+lengkap dengan perjalanan makanan dari dapur ke sekolah.
 
 14
 00:01:13,700 --> 00:01:16,100
-Ia memilih Buat Laporan.
+Hari ini, porsinya kurang.
 
 15
-00:01:16,200 --> 00:01:19,700
-Kolom wajib yang kosong langsung ditandai.
+00:01:16,300 --> 00:01:19,600
+Kolom penting tidak boleh terlewat.
 
 16
-00:01:19,800 --> 00:01:21,600
-Ia memilih Porsi makanan,
+00:01:21,900 --> 00:01:26,800
+Raka memilih kategori porsi dan menceritakan yang terjadi,
 
 17
-00:01:21,700 --> 00:01:26,900
-lalu menulis: porsi yang diterima hari ini tampak lebih sedikit dibanding menu yang ditampilkan.
+00:01:27,200 --> 00:01:31,800
+lalu menambahkan foto sebagai bukti, bila ada.
 
 18
-00:01:27,000 --> 00:01:32,000
-mengisi tanggal, lalu menambah foto bukti yang bersifat opsional. Di sini gambar contoh.
+00:01:32,300 --> 00:01:35,000
+Sistem memeriksa laporan serupa.
 
 19
-00:01:32,100 --> 00:01:35,200
-Saat dikirim, sistem memeriksa kemungkinan laporan serupa.
+00:01:35,500 --> 00:01:40,600
+Ini hanya pengingat, bukan penolakan. Raka tetap bisa mengirim.
 
 20
-00:01:35,300 --> 00:01:41,000
-Ini hanya peringatan bantu, bukan keputusan bahwa laporan palsu. Raka tetap mengirim laporan barunya.
+00:01:41,300 --> 00:01:44,800
+Laporan tercatat dengan nomor unik.
 
 21
-00:01:41,100 --> 00:01:44,900
-Laporan tercatat dengan nomor RT-261110-0027 dan berstatus Menunggu Verifikasi.
+00:01:45,300 --> 00:01:48,900
+Laporan kini masuk antrean petugas.
 
 22
-00:01:45,200 --> 00:01:49,200
-Beralih ke akun petugas sekolah: laporan masuk antrean verifikasi.
+00:01:49,300 --> 00:01:52,300
+Petugas memeriksa isinya.
 
 23
-00:01:49,300 --> 00:01:52,300
-Petugas memeriksa kategori, deskripsi, tanggal, dan bukti.
+00:01:52,600 --> 00:01:55,400
+Laporan dinyatakan valid,
 
 24
-00:01:52,400 --> 00:01:55,700
-Laporan dinilai valid, sehingga statusnya menjadi Terverifikasi.
+00:01:55,900 --> 00:02:00,900
+diberi tingkat urgensi, lalu diteruskan ke SPPG.
 
 25
-00:01:55,800 --> 00:01:57,600
-Petugas menetapkan urgensi Normal,
+00:02:01,400 --> 00:02:03,900
+Setiap langkah tercatat.
 
 26
-00:01:57,700 --> 00:02:01,200
-lalu meneruskannya kepada SPPG.
+00:02:04,400 --> 00:02:09,800
+Laporan yang kurang jelas bisa ditolak, disertai alasan untuk pelapor.
 
 27
-00:02:01,300 --> 00:02:03,900
-Setiap langkah tercatat di riwayat penanganan.
+00:02:10,400 --> 00:02:14,400
+SPPG menerima laporan tanpa identitas pelapor.
 
 28
-00:02:04,100 --> 00:02:09,900
-Contoh lain: laporan yang kurang informasi ditolak, dan alasannya dapat dibaca pelapor.
+00:02:15,000 --> 00:02:17,600
+SPPG mulai menanganinya,
 
 29
-00:02:10,200 --> 00:02:14,700
-Di akun Mitra SPPG, laporan yang diteruskan tampil tanpa identitas pelapor.
+00:02:18,000 --> 00:02:23,800
+lalu memberi tanggapan. Laporan asli tetap utuh.
 
 30
-00:02:14,800 --> 00:02:17,700
-SPPG menandai laporan Dalam Penanganan,
+00:02:27,200 --> 00:02:31,600
+Setelah perbaikan dipastikan, petugas menutup laporan,
 
 31
-00:02:17,800 --> 00:02:24,400
-lalu menulis tanggapan bahwa takaran porsi sudah dikalibrasi ulang. Tanggapan ini tidak mengubah laporan asli.
+00:02:31,900 --> 00:02:35,600
+dengan catatan hasil untuk pelapor.
 
 32
-00:02:24,500 --> 00:02:26,900
-Semuanya tercatat beserta waktu dan pihaknya.
+00:02:38,100 --> 00:02:41,500
+Kasus serius masuk Monitoring Eskalasi.
 
 33
-00:02:27,100 --> 00:02:29,200
-Kembali ke petugas sekolah.
+00:02:41,700 --> 00:02:47,600
+Contoh ini berurgensi tinggi, dan diteruskan ke pihak kesehatan terkait.
 
 34
-00:02:29,300 --> 00:02:35,600
-Setelah tindak lanjut dipantau, petugas menandai laporan Selesai dan menuliskan hasilnya untuk pelapor.
+00:02:47,900 --> 00:02:51,800
+Aplikasi mencatat penanganan, bukan memberi diagnosis.
 
 35
-00:02:35,700 --> 00:02:37,900
-Alur utama pun lengkap.
+00:02:52,400 --> 00:02:55,400
+Kembali ke Raka.
 
 36
-00:02:38,100 --> 00:02:41,400
-Laporan serius dipantau di Monitoring Eskalasi.
+00:02:55,800 --> 00:03:01,800
+Dari riwayat laporannya, ia tahu masalahnya sudah selesai,
 
 37
-00:02:41,500 --> 00:02:47,600
-Pada kasus terpisah ini, petugas menetapkan urgensi Tinggi dan meneruskannya ke pihak kesehatan terkait sesuai prosedur.
+00:03:02,200 --> 00:03:05,400
+membaca tanggapan SPPG,
 
 38
-00:02:47,700 --> 00:02:51,900
-Penanggung jawab dan riwayat tercatat. Aplikasi tidak memberi diagnosis.
+00:03:05,800 --> 00:03:09,900
+dan melihat siapa menangani, kapan, dan apa tindakannya.
 
 39
-00:02:52,100 --> 00:02:55,500
-Kembali ke akun orang tua. Raka membuka Riwayat Laporan,
+00:03:10,400 --> 00:03:14,600
+Masyarakat pun bisa memantau, tanpa login.
 
 40
-00:02:55,600 --> 00:02:58,700
-memilih laporan RT-261110-0027,
+00:03:15,000 --> 00:03:21,800
+Terlihat berapa laporan masuk, terverifikasi, dan selesai,
 
 41
-00:02:58,800 --> 00:03:02,000
-lalu melihat hasil penyelesaiannya,
+00:03:22,600 --> 00:03:27,800
+juga sebaran kategori dan tren enam bulan.
 
 42
-00:03:02,100 --> 00:03:05,600
-tanggapan dari SPPG,
+00:03:28,600 --> 00:03:34,600
+Semuanya data agregat, tanpa identitas siapa pun.
 
 43
-00:03:05,700 --> 00:03:09,900
-serta timeline lengkap: kapan, oleh siapa, dan apa tindakannya.
+00:03:35,600 --> 00:03:40,400
+Informasi makanan membantu orang tua memahami layanan.
 
 44
-00:03:10,100 --> 00:03:14,900
-Masyarakat dapat membuka dashboard transparansi tanpa login.
-
-45
-00:03:15,000 --> 00:03:18,600
-Data demo 90 hari: 21 laporan masuk, 16 terverifikasi.
-
-46
-00:03:18,700 --> 00:03:22,200
-10 selesai, 6 masih ditangani; penyelesaian 63 persen.
-
-47
-00:03:22,300 --> 00:03:28,200
-Ada juga statistik per kategori dan grafik perkembangan enam bulan.
-
-48
-00:03:28,300 --> 00:03:34,900
-Definisi setiap angka ditulis jelas, dan yang ditampilkan hanya data agregat, tanpa identitas atau catatan pribadi.
-
-49
-00:03:35,300 --> 00:03:40,500
-Rangkumannya: informasi makanan membantu pengguna memahami layanan yang diterima.
-
-50
-00:03:40,800 --> 00:03:46,000
+00:03:41,100 --> 00:03:45,800
 Laporan terstruktur lebih mudah diperiksa.
 
+45
+00:03:46,600 --> 00:03:51,300
+Setiap laporan diverifikasi sebelum diteruskan.
+
+46
+00:03:52,100 --> 00:03:56,800
+Laporan serius diprioritaskan, dengan penanggung jawab jelas.
+
+47
+00:03:57,600 --> 00:04:02,300
+Pelapor bisa memantau sampai selesai.
+
+48
+00:04:03,100 --> 00:04:07,800
+Dan publik melihat perkembangannya, tanpa data pribadi.
+
+49
+00:04:08,800 --> 00:04:14,400
+Semua nyaman dipakai di HP, tablet, maupun desktop.
+
+50
+00:04:15,500 --> 00:04:17,300
+Ke depan,
+
 51
-00:03:46,300 --> 00:03:51,500
-Verifikasi petugas memastikan setiap laporan diperiksa sebelum diteruskan.
+00:04:17,800 --> 00:04:23,600
+kami ingin menguji coba Rantang Terang bersama sekolah dan pengguna,
 
 52
-00:03:51,800 --> 00:03:57,000
-Eskalasi memprioritaskan laporan serius dengan penanggung jawab yang jelas.
+00:04:24,300 --> 00:04:30,200
+menjajaki integrasi dengan layanan resmi melalui kerja sama,
 
 53
-00:03:57,300 --> 00:04:02,500
-Pelapor dapat memantau status, tanggapan, dan penyelesaian.
+00:04:30,800 --> 00:04:37,600
+dan memperluas akses lewat bahasa daerah serta mode hemat kuota.
 
 54
-00:04:02,800 --> 00:04:08,000
-Transparansi publik menampilkan perkembangan tanpa membuka data pribadi.
-
-55
-00:04:08,300 --> 00:04:14,800
-Dan semua tampilan menyesuaikan layar HP, tablet, maupun desktop.
-
-56
-00:04:15,300 --> 00:04:17,400
-Ke depan, ada tiga rencana.
-
-57
-00:04:17,600 --> 00:04:23,800
-Pertama, uji coba bersama sekolah dan pengguna untuk menilai kemudahan, partisipasi, dan manfaat alur pelaporan.
-
-58
-00:04:24,100 --> 00:04:30,300
-Kedua, menjajaki integrasi dengan layanan resmi yang relevan, melalui kerja sama dan akses yang diperlukan.
-
-59
-00:04:30,600 --> 00:04:38,300
-Ketiga, memperluas akses dengan dukungan bahasa daerah dan mode hemat kuota.
-
-60
-00:04:39,200 --> 00:04:44,900
+00:04:39,200 --> 00:04:45,200
 Rantang Terang: setiap laporan tercatat, ditindaklanjuti, dan dapat dipantau.
 
-61
-00:04:45,200 --> 00:04:49,600
-Terima kasih. Kami Incess Cikarang dari President University.
+55
+00:04:45,700 --> 00:04:49,400
+Terima kasih.
 
