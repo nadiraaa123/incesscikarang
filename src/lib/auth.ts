@@ -121,14 +121,10 @@ export async function daftar(u: Omit<Pengguna, 'id'>, kode: string): Promise<Has
   if (modeOnline) {
     try {
       const sb = await klien()
-      const { error } = await sb.auth.signUp({ email: emailAkun(u.username), password: u.pin })
-      if (error) return { ok: false, pesan: /registered/i.test(error.message) ? 'Nomor ini sudah terdaftar. Silakan masuk.' : pesanGalat(error) }
-      const { error: e2 } = await sb.rpc('daftar_dengan_undangan', { p_kode: kode, p_nama: u.nama, p_peran: u.peran })
-      if (e2) return { ok: false, pesan: pesanGalat(e2) }
-      const { data } = await sb.auth.getUser()
-      await muatProfilOnline(data.user?.id)
-      beri()
-      return profilOnline ? { ok: true, pesan: '', user: profilOnline } : { ok: false, pesan: 'Profil gagal dibuat.' }
+      // Akun dibuat di server (fungsi daftar_akun) karena Supabase Auth menolak domain email sintetis pada signUp
+      const { error } = await sb.rpc('daftar_akun', { p_kode: kode, p_wa: u.username, p_pin: u.pin, p_nama: u.nama, p_peran: u.peran })
+      if (error) return { ok: false, pesan: pesanGalat(error) }
+      return masuk(u.username, u.pin)
     } catch (e) { return { ok: false, pesan: pesanGalat(e) } }
   }
   const r = daftarPengguna(u)
