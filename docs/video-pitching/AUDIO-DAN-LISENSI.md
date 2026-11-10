@@ -36,8 +36,9 @@ Naskah v2 (`naskah-vo.txt`, 55 baris, 358 kata) ditulis ulang bergaya storytelli
 
 **Status: belum ada rekaman suara final.** Lingkungan produksi tidak memiliki suara TTS perempuan Bahasa Indonesia yang natural. Model lokal tidak bisa diunduh, layanan suara Microsoft diblokir jaringan, dan Google Cloud Text-to-Speech butuh kunci API. Suara uji robotik (espeak) hanya dipakai untuk memeriksa sinkronisasi dan ducking, **tidak** dipakai di video.
 
-Menyelesaikan narasi:
+Menyelesaikan narasi (rekaman satu file utuh juga bisa, lihat `potong-vo.py`):
 ```bash
+python3 potong-vo.py rekaman.m4a vo/            # memotong satu rekaman jadi 01.wav … 55.wav
 cd docs/video-pitching/produksi
 python3 mix.py <folder berisi 01.wav … 55.wav> RantangTerang_draft_tanpa_narasi.mp4 RantangTerang_final.mp4
 ```
