@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, ShieldCheck, ChevronRight, ChefHat, Truck, School, Utensils, ClipboardPen, BookOpen, Soup, Users, ArrowRight } from 'lucide-react'
-import { Card, Demo, Footer, Page, Sumber, TopBar, cx } from '../components/ui'
+import { Search, ShieldCheck, ChevronRight, ChefHat, Truck, School, Utensils, ClipboardPen, BarChart3, Soup, Users, ArrowRight } from 'lucide-react'
+import { Card, Demo, Footer, Page, Sumber, TopBar, berandaPeran, cx } from '../components/ui'
 import { ItemMasukan } from '../components/mbg'
 import { FotoAtauIlustrasi, HeroScene, Ompreng } from '../components/ilustrasi'
 import { daftarMasukan, menuHariIni, peringkatSekolah, sekolahById, sppgById, useDB } from '../lib/db'
@@ -30,7 +30,7 @@ export default function Home() {
   const menu = menuHariIni(d, contoh.sppgId)
   const masukan = daftarMasukan(d).slice(0, 2)
   const peringkat = peringkatSekolah(d).slice(0, 3)
-  const keLapor = user ? (user.peran === 'sppg' ? '/mitra/sppg' : '/app') : '/masuk'
+  const keLapor = !user ? '/masuk' : ['ortu', 'siswa', 'guru'].includes(user.peran) ? '/lapor/baru' : berandaPeran(user)
 
   return (
     <>
@@ -58,13 +58,13 @@ export default function Home() {
         <nav aria-label="Akses cepat" className="mt-5 grid grid-cols-4 gap-2">
           {[
             { to: '/sekolah', label: 'Cari sekolah', icon: School, warna: 'bg-leaf-soft text-leaf' },
-            { to: keLapor, label: 'Lapor hari ini', icon: ClipboardPen, warna: 'bg-brick-soft text-brick' },
+            { to: keLapor, label: 'Buat laporan', icon: ClipboardPen, warna: 'bg-brick-soft text-brick' },
             { to: `/sekolah/${contoh.id}`, label: 'Menu hari ini', icon: Soup, warna: 'bg-sun-soft text-[#8A5D06]' },
-            { to: '/tentang', label: 'Cara kerja', icon: BookOpen, warna: 'bg-slate2-soft text-slate2' },
+            { to: '/transparansi', label: 'Transparansi', icon: BarChart3, warna: 'bg-slate2-soft text-slate2' },
           ].map(({ to, label, icon: I, warna }) => (
             <Link key={label} to={to} className="flex flex-col items-center gap-1.5 rounded-2xl bg-white p-2.5 text-center ring-1 ring-line hover:ring-leaf">
               <span className={cx('grid h-11 w-11 place-items-center rounded-xl', warna)}><I size={21} /></span>
-              <span className="text-[11.5px] font-semibold leading-tight text-ink">{label}</span>
+              <span className="break-anywhere text-[11.5px] font-semibold leading-tight text-ink">{label}</span>
             </Link>
           ))}
         </nav>
@@ -156,6 +156,12 @@ export default function Home() {
           </div>
           <p className="text-[26px] font-extrabold tabular-nums text-ink">{STAT_NASIONAL[2].nilai}</p>
         </Card>
+
+        <Link to="/transparansi" className="mt-3 flex items-center gap-3 rounded-xl border border-line bg-white p-3.5 hover:border-leaf">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-slate2-soft text-slate2"><BarChart3 size={20} /></span>
+          <span className="min-w-0 flex-1"><span className="block text-[15px] font-bold text-ink">Pantau tindak lanjut laporan warga</span><span className="block text-[12.5px] text-muted">Berapa yang terverifikasi, ditangani, dan selesai, tanpa data pribadi.</span></span>
+          <ChevronRight size={16} className="text-muted" />
+        </Link>
 
         {/* MASUKAN */}
         <Judul kecil="Suara warga" aksi={<Link to="/sekolah" className="text-sm font-bold text-leaf">Semua</Link>}>Masukan & tanggapan dapur</Judul>

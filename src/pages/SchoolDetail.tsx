@@ -43,7 +43,7 @@ export default function SchoolDetail() {
         {peringatan?.status === 'diperiksa' && amb.jumlah >= 3 && (
           <div className="mt-3 flex gap-2 rounded-xl border border-brick/30 bg-brick-soft p-3 text-sm text-ink">
             <AlertTriangle size={18} className="mt-0.5 shrink-0 text-brick" />
-            <p><span className="font-bold">Perlu perhatian:</span> {amb.jumlah} laporan keluhan dari {amb.kelas} kelas hari ini. Sudah diperiksa petugas sekolah dan diteruskan ke SPPG serta puskesmas setempat.</p>
+            <p><span className="font-bold">Perlu perhatian:</span> {amb.jumlah} laporan keluhan dari {amb.kelas} kelas hari ini. Sudah dicek petugas sekolah. Tindak lanjut per laporan tercatat dan rekapnya tampil di halaman Transparansi.</p>
           </div>
         )}
 

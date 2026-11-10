@@ -1,7 +1,10 @@
 import { useRef, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { AlertTriangle, Camera, CheckCircle2, ClipboardList, FileHeart, ImageOff, Lock, LogOut, Users } from 'lucide-react'
-import { Button, Card, Chip, Demo, H2, Page, Toast, TopBar, cx, kompresFoto, panggilan } from '../components/ui'
+import { AlertTriangle, Camera, CheckCircle2, ChevronRight, ClipboardList, ClipboardPen, FileHeart, History, ImageOff, Inbox, Lock, LogOut, ShieldCheck, Siren, Users } from 'lucide-react'
+import { Button, Card, Chip, Demo, H2, LinkButton, Page, Toast, TopBar, berandaPeran, cx, kompresFoto, panggilan } from '../components/ui'
+import { LabelStatus } from '../components/laporan'
+import { repo, useKueri } from '../lib/repo'
+import { masukEskalasi, STATUS_AKTIF, labelKategori } from '../lib/pengaduan'
 import { KartuMenu, Perjalanan } from '../components/mbg'
 import { FormKondisi, FormPenilaian, GEJALA } from '../components/forms'
 import { useSesi, keluar, labelPeran } from '../lib/auth'
@@ -12,16 +15,17 @@ import type { Pengguna } from '../lib/types'
 export default function AppHome() {
   const user = useSesi()
   if (!user) return <Navigate to="/masuk" replace />
-  if (user.peran === 'sppg') return <Navigate to="/mitra/sppg" replace />
+  if (user.peran === 'sppg' || user.peran === 'kesehatan') return <Navigate to={berandaPeran(user)} replace />
   return (
     <>
       <TopBar />
       <Page>
         <Salam user={user} />
+        {user.peran === 'petugas' ? <RingkasPetugas user={user} /> : <RingkasPelapor user={user} />}
         {user.peran === 'ortu' && <BerandaOrtu user={user} />}
         {(user.peran === 'siswa' || user.peran === 'guru') && <BerandaSiswa user={user} />}
         {user.peran === 'petugas' && <BerandaPetugas user={user} />}
-        <button onClick={() => keluar()} className="mt-8 flex w-full items-center justify-center gap-2 text-sm font-semibold text-muted"><LogOut size={15} /> Keluar</button>
+        <button onClick={() => keluar()} className="mt-8 flex min-h-[44px] w-full items-center justify-center gap-2 text-sm font-semibold text-muted"><LogOut size={15} /> Keluar</button>
       </Page>
     </>
   )
@@ -47,6 +51,63 @@ function Salam({ user }: { user: Pengguna }) {
         </div>
       </Link>
     </div>
+  )
+}
+
+/** Kartu laporan masalah untuk orang tua/siswa/guru: tombol buat laporan + 3 laporan terakhir dengan status. */
+function RingkasPelapor({ user }: { user: Pengguna }) {
+  const q = useKueri(() => repo.daftar(user, 'saya'), [user.id])
+  const l = q.data ?? []
+  const proses = l.filter((p) => p.status === 'menunggu_verifikasi' || STATUS_AKTIF.includes(p.status)).length
+  return (
+    <>
+      <H2 aksi={<Link to="/laporan" className="flex min-h-[44px] items-center text-sm font-bold text-leaf">Riwayat</Link>}>Laporan masalah</H2>
+      <Card>
+        <p className="text-sm text-muted">Ada masalah kualitas, kebersihan, porsi, keterlambatan, atau kondisi anak? Laporkan agar diperiksa petugas dan ditindaklanjuti SPPG.</p>
+        <LinkButton to="/lapor/baru" className="mt-3 w-full"><ClipboardPen size={18} /> Buat laporan</LinkButton>
+        {l.length > 0 && (
+          <ul className="mt-3 divide-y divide-line border-t border-line">
+            {l.slice(0, 3).map((p) => (
+              <li key={p.id}>
+                <Link to={`/laporan/${p.id}`} className="flex items-center gap-2 py-2.5">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-ink">{labelKategori(p.kategori)} <span className="font-mono text-xs font-normal text-muted">{p.nomor}</span></p>
+                    <div className="mt-1"><LabelStatus status={p.status} kecil /></div>
+                  </div>
+                  <ChevronRight size={16} className="text-muted" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+        {proses > 0 && <p className="mt-1 flex items-center gap-1.5 text-xs text-muted"><History size={13} /> {proses} laporan sedang diproses</p>}
+      </Card>
+    </>
+  )
+}
+
+/** Ringkasan kerja petugas: antrean verifikasi & kasus eskalasi. */
+function RingkasPetugas({ user }: { user: Pengguna }) {
+  const q = useKueri(() => repo.daftar(user, 'sekolah'), [user.id])
+  const l = q.data ?? []
+  const kartu: [string, string, number, typeof Inbox, string][] = [
+    ['/petugas/verifikasi', 'Menunggu verifikasi', l.filter((p) => p.status === 'menunggu_verifikasi').length, Inbox, 'text-ink'],
+    ['/petugas/eskalasi', 'Jalur eskalasi aktif', l.filter((p) => STATUS_AKTIF.includes(p.status) && masukEskalasi(p)).length, Siren, 'text-brick'],
+    ['/petugas/eskalasi', 'Sedang ditindaklanjuti', l.filter((p) => STATUS_AKTIF.includes(p.status)).length, ShieldCheck, 'text-slate2'],
+  ]
+  return (
+    <>
+      <H2>Laporan masalah</H2>
+      <div className="grid grid-cols-3 gap-2">
+        {kartu.map(([to, label, n, I, warna]) => (
+          <Link key={label} to={to} className="rounded-xl border border-line bg-white p-3 hover:border-leaf">
+            <I size={18} className={warna} />
+            <p className="mt-1 text-2xl font-extrabold tabular-nums text-ink">{q.memuat && !q.data ? '–' : n}</p>
+            <p className="text-[11.5px] leading-tight text-muted">{label}</p>
+          </Link>
+        ))}
+      </div>
+    </>
   )
 }
 
@@ -88,6 +149,7 @@ function BerandaOrtu({ user }: { user: Pengguna }) {
       <H2>Laporan sore</H2>
       <div className="space-y-3">
         <FormKondisi user={user} judul={`Bagaimana kondisi ${user.anak ?? 'anak'} setelah makan?`} onDone={setToast} />
+        <TautanLaporKondisi user={user} />
         <FormPenilaian user={user} onDone={setToast} />
         <KartuRujukan user={user} />
       </div>
@@ -142,6 +204,20 @@ function BerandaSiswa({ user }: { user: Pengguna }) {
       {user.peran === 'guru' && <p className="mt-3 text-sm text-muted">Laporan guru dihitung tanpa nama di dasbor sekolah.</p>}
       <Toast pesan={toast} onClose={() => setToast('')} />
     </>
+  )
+}
+
+/** Bila hari ini melapor "Ada keluhan", tawarkan laporan masalah agar diverifikasi & ditindaklanjuti. */
+function TautanLaporKondisi({ user }: { user: Pengguna }) {
+  const d = useDB()
+  const keluhan = d.laporan.some((l) => l.userId === user.id && l.tanggal === hariOperasional() && l.kondisi === 'keluhan')
+  if (!keluhan) return null
+  return (
+    <Link to="/lapor/baru?kategori=kondisi" className="flex items-center gap-3 rounded-xl border border-brick/30 bg-brick-soft/60 p-3">
+      <ClipboardPen size={20} className="shrink-0 text-brick" />
+      <span className="flex-1 text-sm"><span className="block font-bold text-ink">Perlu ditindaklanjuti?</span><span className="text-muted">Buat laporan “Kondisi penerima manfaat” agar diperiksa petugas dan diteruskan.</span></span>
+      <ChevronRight size={16} className="text-muted" />
+    </Link>
   )
 }
 
@@ -210,9 +286,12 @@ function BerandaPetugas({ user }: { user: Pengguna }) {
               <p className="font-bold text-ink">{amb.terlampaui ? 'Ambang keluhan terlampaui' : 'Keluhan perlu dicek'}</p>
               <p className="text-sm text-muted">{amb.jumlah} laporan dari {amb.kelas} kelas ({amb.persen}% siswa). Ambang: ≥3 laporan, ≥2% siswa, ≥2 kelas.</p>
               {peringatan?.status === 'diperiksa' ? (
-                <Chip jenis="diperiksa">Sudah diperiksa & diteruskan</Chip>
+                <Chip jenis="diperiksa">Sudah dicek petugas</Chip>
               ) : (
-                <Button className="mt-3 w-full" onClick={() => { tandaiDiperiksa(s.id); setToast('Peringatan diteruskan ke SPPG dan puskesmas (simulasi).') }}>Sudah dicek, teruskan</Button>
+                <>
+                  <Button className="mt-3 w-full" onClick={() => { tandaiDiperiksa(s.id); setToast('Peringatan ditandai sudah dicek.') }}>Tandai sudah dicek</Button>
+                  <p className="mt-2 text-xs text-muted">Penerusan ke SPPG/pihak kesehatan dilakukan per laporan melalui <Link to="/petugas/eskalasi" className="font-semibold text-leaf">Monitoring eskalasi</Link>, agar tercatat di riwayat penanganan.</p>
+                </>
               )}
             </div>
           </div>

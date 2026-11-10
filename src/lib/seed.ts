@@ -1,6 +1,7 @@
-import type { DB, Menu, MenuItem, PoinLog, Riwayat } from './types'
+import type { DB, Menu, MenuItem, Pengguna, PoinLog, Riwayat } from './types'
 import { SEKOLAH_ASLI, WILAYAH } from './sekolah-asli'
 import { lastSchoolDay, monthsBack, schoolDaysBefore } from './date'
+import { buatSeedPengaduan } from './seed-pengaduan'
 
 /**
  * Data contoh untuk demo. Semua laporan warga, penilaian, foto, dan akun di sini adalah CONTOH.
@@ -113,7 +114,7 @@ export function buatSeed(): DB {
   })
 
   return {
-    versi: 2,
+    versi: 3,
     wilayah: WILAYAH,
     sppg: [
       { id: 'SPPG-DEMO-01', nama: 'SPPG Uji Coba 01', kab: 'Wilayah uji coba', alamat: 'Alamat contoh' },
@@ -121,10 +122,10 @@ export function buatSeed(): DB {
     ],
     sekolah: [
       ...SEKOLAH_ASLI,
-      { id: 'uji-sd-1', nama: 'SD Uji Coba 1', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', sppgId: 'SPPG-DEMO-01', siswa: 312, akunTerdaftar: 180, pelaporAktifSeed: 121, tertibCatat: true },
-      { id: 'uji-sd-2', nama: 'SD Uji Coba 2', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', sppgId: 'SPPG-DEMO-01', siswa: 280, akunTerdaftar: 160, pelaporAktifSeed: 118, tertibCatat: true },
-      { id: 'uji-smp-1', nama: 'SMP Uji Coba 1', npsn: 'contoh', jenjang: 'SMP', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', sppgId: 'SPPG-DEMO-02', siswa: 640, akunTerdaftar: 290, pelaporAktifSeed: 152, tertibCatat: false },
-      { id: 'uji-sd-3', nama: 'SD Uji Coba 3', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', sppgId: 'SPPG-DEMO-01', siswa: 254, akunTerdaftar: 150, pelaporAktifSeed: 64, tertibCatat: false },
+      { id: 'uji-sd-1', nama: 'SD Uji Coba 1', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-01', siswa: 312, akunTerdaftar: 180, pelaporAktifSeed: 121, tertibCatat: true },
+      { id: 'uji-sd-2', nama: 'SD Uji Coba 2', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-01', siswa: 280, akunTerdaftar: 160, pelaporAktifSeed: 118, tertibCatat: true },
+      { id: 'uji-smp-1', nama: 'SMP Uji Coba 1', npsn: 'contoh', jenjang: 'SMP', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-02', siswa: 640, akunTerdaftar: 290, pelaporAktifSeed: 152, tertibCatat: false },
+      { id: 'uji-sd-3', nama: 'SD Uji Coba 3', npsn: 'contoh', jenjang: 'SD', kab: 'Wilayah uji coba', kec: 'Data contoh', wilayahId: 'uji', faskesId: 'PKM-DEMO-01', sppgId: 'SPPG-DEMO-01', siswa: 254, akunTerdaftar: 150, pelaporAktifSeed: 64, tertibCatat: false },
     ],
     menu,
     pengguna: [
@@ -134,6 +135,7 @@ export function buatSeed(): DB {
       { id: 'u-petugas-sd', username: 'PTG-SD-01', pin: '123456', nama: 'Pak Anton', peran: 'petugas', schoolId: 'uji-sd-1', demo: true },
       { id: 'u-petugas-smp', username: 'PTG-SMP-01', pin: '123456', nama: 'Bu Sari', peran: 'petugas', schoolId: 'uji-smp-1', demo: true },
       { id: 'u-sppg', username: 'SPPG-DEMO-01', pin: '123456', nama: 'Ibu Dewi (ahli gizi)', peran: 'sppg', sppgId: 'SPPG-DEMO-01', demo: true },
+      KESEHATAN_DEMO,
     ],
     undangan: [
       { kode: 'KLS-UJISD1-4A', schoolId: 'uji-sd-1', kelas: '4A', tipe: 'kelas' },
@@ -168,5 +170,10 @@ export function buatSeed(): DB {
     ],
     peringatan: [],
     rujukan: [],
+    faskes: [FASKES_DEMO],
+    ...buatSeedPengaduan(),
   }
 }
+
+export const FASKES_DEMO = { id: 'PKM-DEMO-01', nama: 'Puskesmas Uji Coba', kab: 'Wilayah uji coba' }
+export const KESEHATAN_DEMO: Pengguna = { id: 'u-kesehatan', username: 'PKM-DEMO-01', pin: '123456', nama: 'dr. Laras (Puskesmas)', peran: 'kesehatan', faskesId: 'PKM-DEMO-01', demo: true }
