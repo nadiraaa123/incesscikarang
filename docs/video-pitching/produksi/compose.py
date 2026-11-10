@@ -53,7 +53,7 @@ def build_segments():
         for x in files: f.write(f"file '{os.path.abspath(x)}'\n")
     subprocess.run(['ffmpeg','-v','error','-y','-f','concat','-safe','0','-i','seg/list.txt','-c','copy','seg/full-noass.mp4'],check=True)
 # ---------- narration (abs seconds) ----------
-VO = json.load(open('vo.json'))
+VO = json.load(open('vo-final.json' if os.path.exists('vo-final.json') else 'vo.json'))
 STEPS = json.load(open('steps.json'))
 def ts(x):
     h=int(x//3600); m=int(x%3600//60); s=x%60

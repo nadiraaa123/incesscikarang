@@ -166,7 +166,7 @@ Catatan: Rantang Terang adalah proyek independen, bukan layanan resmi pemerintah
 | Klaim | ✅ | Tidak ada statistik nasional, skor performa, atau klaim diagnosis/integrasi resmi |
 | Konsistensi angka | ✅ | Nomor RT-261110-0027 dipakai di semua adegan. Dasbor 90 hari: 21 / 16 / 6 / 10 / 63% (6 + 10 = 16; persentase = selesai ÷ terverifikasi). |
 | Musik | ✅ | Komposisi orisinal, crossfade, ducking (lihat `AUDIO-DAN-LISENSI.md`) |
-| Narasi | ❌ belum | Naskah v2 dan pipeline mixing siap; suara belum ada |
+| Narasi | ✅ | Rekaman tim, disinkronkan per baris (lihat `AUDIO-DAN-LISENSI.md`) |
 
 ## 8. Yang masih harus dikerjakan tim
 

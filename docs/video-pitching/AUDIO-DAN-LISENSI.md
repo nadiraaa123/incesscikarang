@@ -34,13 +34,22 @@ Saya **tidak** memakai musik dari YouTube Audio Library atau situs “no copyrig
 
 Naskah v2 (`naskah-vo.txt`, 55 baris, 358 kata) ditulis ulang bergaya storytelling dan diperiksa per suku kata (≤ 5 suku kata/detik). Alasannya: uji timing menunjukkan naskah v1 (538 kata) tidak muat di 28 baris pada tempo natural.
 
-**Status: belum ada rekaman suara final.** Lingkungan produksi tidak memiliki suara TTS perempuan Bahasa Indonesia yang natural. Model lokal tidak bisa diunduh, layanan suara Microsoft diblokir jaringan, dan Google Cloud Text-to-Speech butuh kunci API. Suara uji robotik (espeak) hanya dipakai untuk memeriksa sinkronisasi dan ducking, **tidak** dipakai di video.
+**Status: selesai.** Narasi direkam tim dalam satu file (4:19, suara perempuan; rekaman tidak di-commit). Rekaman dipotong menjadi 55 baris dengan `selaras.py`. Tiga metode independen (DTW terhadap suara acuan naskah, pemrograman dinamis berbasis durasi, dan gabungan keduanya) menghasilkan batas yang sama untuk ke-55 baris.
 
-Menyelesaikan narasi (rekaman satu file utuh juga bisa, lihat `potong-vo.py`):
+Setiap baris lalu ditempatkan dengan `tempatkan-vo.py`:
+- mulai tepat sesuai rencana;
+- dimajukan maks. 0,6 dtk atau diundur maks. 0,53 dtk hanya bila perlu;
+- tempo maks. 1,06× (nada tidak berubah).
+
+Subtitle di video dan `subtitle-id.srt` mengikuti waktu suara aktual (`vo-final.json`). Mixing dengan `mix.py --track`. Hasil: sekitar −16,9 LUFS, puncak −3,8 dBFS, durasi 4:50.
+
+Untuk mengulang dengan rekaman baru:
 ```bash
-python3 potong-vo.py rekaman.m4a vo/            # memotong satu rekaman jadi 01.wav … 55.wav
 cd docs/video-pitching/produksi
-python3 mix.py <folder berisi 01.wav … 55.wav> RantangTerang_draft_tanpa_narasi.mp4 RantangTerang_final.mp4
+python3 selaras.py            # baca vo-asli/rekaman.wav -> vo-asli/selaras.json (perlu audio/vo-uji/*.wav dari espeak-ng)
+python3 tempatkan-vo.py       # -> audio/vo-track.wav + vo-final.json
+python3 compose.py burn       # subtitle mengikuti vo-final.json
+python3 mix.py --track RantangTerang_draft_tanpa_narasi.mp4 RantangTerang_final.mp4
 ```
 
 ## 4. Jika ingin mengganti dengan musik YouTube Audio Library

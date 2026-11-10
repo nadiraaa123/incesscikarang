@@ -1,5 +1,6 @@
 """Mixing akhir: narasi per baris + musik latar + ducking -> video final.
 Pemakaian:
+  python3 mix.py --track VIDEO_IN VIDEO_OUT   (pakai audio/vo-track.wav yang sudah ditempatkan)
   python3 mix.py VO_DIR VIDEO_IN VIDEO_OUT
 VO_DIR berisi 01.wav, 02.wav, ... (satu file per baris vo.json, urutan sama; .wav/.mp3/.m4a).
 Bila sebuah baris lebih panjang dari jatahnya, dipercepat maks. 8%; lebih dari itu dilaporkan, tidak dipotong."""
@@ -17,21 +18,24 @@ def load(f, tempo=1.0):
     # buang hening di awal/akhir
     th=np.abs(x).max()*0.02; idx=np.where(np.abs(x)>th)[0]
     return x[max(0,idx[0]-int(.03*SR)):idx[-1]+int(.12*SR)] if len(idx) else x
-track=np.zeros(int(TOTAL*SR),np.float32); rep=[]
-files=sorted(glob.glob(os.path.join(vo_dir,'*.*')))
-assert len(files)==len(V), f'{len(files)} file VO, harus {len(V)} (satu per baris vo.json)'
-for i,(v,f) in enumerate(zip(V,files)):
-    slot=v['t1']-v['t0']+0.25          # boleh melewati akhir subtitle 0,25 dtk
-    nxt=V[i+1]['t0'] if i+1<len(V) else TOTAL
-    slot=min(slot+0.15, nxt-v['t0']-0.05)
-    x=load(f); d=len(x)/SR; tempo=1.0
-    if d>slot:
-        tempo=min(1.08,d/slot); x=load(f,tempo); d=len(x)/SR
-    status='OK' if d<=slot+0.01 else f'KEPANJANGAN {d-slot:.2f}s'
-    rep.append(f'{i+1:02d} {v["t0"]:6.1f}s slot {slot:4.1f}s suara {d:4.1f}s tempo {tempo:.3f} {status}')
-    s=int(v['t0']*SR); track[s:s+len(x)]+=x[:len(track)-s]
-open('audio/laporan-vo.txt','w').write('\n'.join(rep)+'\n'); print('\n'.join(r for r in rep if 'OK' not in r) or 'semua baris muat')
-wavfile.write('audio/vo-track.wav',SR,track)
+if vo_dir=='--track':
+    pass
+else:
+  track=np.zeros(int(TOTAL*SR),np.float32); rep=[]
+  files=sorted(glob.glob(os.path.join(vo_dir,'*.*')))
+  assert len(files)==len(V), f'{len(files)} file VO, harus {len(V)} (satu per baris vo.json)'
+  for i,(v,f) in enumerate(zip(V,files)):
+      slot=v['t1']-v['t0']+0.25          # boleh melewati akhir subtitle 0,25 dtk
+      nxt=V[i+1]['t0'] if i+1<len(V) else TOTAL
+      slot=min(slot+0.15, nxt-v['t0']-0.05)
+      x=load(f); d=len(x)/SR; tempo=1.0
+      if d>slot:
+          tempo=min(1.08,d/slot); x=load(f,tempo); d=len(x)/SR
+      status='OK' if d<=slot+0.01 else f'KEPANJANGAN {d-slot:.2f}s'
+      rep.append(f'{i+1:02d} {v["t0"]:6.1f}s slot {slot:4.1f}s suara {d:4.1f}s tempo {tempo:.3f} {status}')
+      s=int(v['t0']*SR); track[s:s+len(x)]+=x[:len(track)-s]
+  open('audio/laporan-vo.txt','w').write('\n'.join(rep)+'\n'); print('\n'.join(r for r in rep if 'OK' not in r) or 'semua baris muat')
+  wavfile.write('audio/vo-track.wav',SR,track)
 # 1) normalisasi narasi ke -16 LUFS; 2) musik dasar -23 LUFS, di-duck oleh narasi; 3) gabung, batasi puncak -1,5 dBTP
 fc=("[0:a]aformat=sample_rates=48000:channel_layouts=mono,"
     "acompressor=threshold=-24dB:ratio=3:attack=8:release=120:makeup=2,loudnorm=I=-16:TP=-2:LRA=7,"

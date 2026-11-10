@@ -1,0 +1,277 @@
+[
+{
+"t0": 0.6,
+"t1": 5.59,
+"x": "Halo! Kami Incess Cikarang dari President University."
+},
+{
+"t0": 5.77,
+"t1": 10.2,
+"x": "Ada Helen Stephanis Simarmata, Business Analyst kami,"
+},
+{
+"t0": 11.4,
+"t1": 14.83,
+"x": "Dian Theresia Girsang sebagai Project Manager,"
+},
+{
+"t0": 17.4,
+"t1": 21.35,
+"x": "dan Nadira Khumaira Putri di bagian Frontend dan Backend."
+},
+{
+"t0": 23.8,
+"t1": 27.25,
+"x": "Bersama, kami membangun Rantang Terang."
+},
+{
+"t0": 30.4,
+"t1": 36.79,
+"x": "Rantang Terang adalah aplikasi web untuk memantau layanan Makan Bergizi Gratis."
+},
+{
+"t0": 37.08,
+"t1": 42.75,
+"x": "Orang tua ingin tahu makanan anaknya, dan tempat melapor yang jelas."
+},
+{
+"t0": 42.93,
+"t1": 47.1,
+"x": "Laporan perlu ditindaklanjuti, dan bisa dipantau publik."
+},
+{
+"t0": 47.28,
+"t1": 55.03,
+"x": "Laporan diverifikasi petugas, lalu ditindaklanjuti SPPG, Satuan Pelayanan Pemenuhan Gizi."
+},
+{
+"t0": 55.21,
+"t1": 60.65,
+"x": "Setiap laporan tercatat, ditindaklanjuti, dan dapat dipantau."
+},
+{
+"t0": 60.83,
+"t1": 63.54,
+"x": "Mari ikuti satu laporan sampai selesai."
+},
+{
+"t0": 63.8,
+"t1": 69.15,
+"x": "Raka, seorang orang tua, melihat menu anaknya hari ini,"
+},
+{
+"t0": 69.33,
+"t1": 73.1,
+"x": "lengkap dengan perjalanan makanan dari dapur ke sekolah."
+},
+{
+"t0": 73.7,
+"t1": 76.21,
+"x": "Hari ini, porsinya kurang."
+},
+{
+"t0": 76.39,
+"t1": 78.88,
+"x": "Kolom penting tidak boleh terlewat."
+},
+{
+"t0": 81.9,
+"t1": 86.63,
+"x": "Raka memilih kategori porsi dan menceritakan yang terjadi,"
+},
+{
+"t0": 87.2,
+"t1": 91.05,
+"x": "lalu menambahkan foto sebagai bukti, bila ada."
+},
+{
+"t0": 92.3,
+"t1": 94.67,
+"x": "Sistem memeriksa laporan serupa."
+},
+{
+"t0": 95.5,
+"t1": 100.79,
+"x": "Ini hanya pengingat, bukan penolakan. Raka tetap bisa mengirim."
+},
+{
+"t0": 101.3,
+"t1": 103.73,
+"x": "Laporan tercatat dengan nomor unik."
+},
+{
+"t0": 105.3,
+"t1": 108.25,
+"x": "Laporan kini masuk antrean petugas."
+},
+{
+"t0": 109.3,
+"t1": 111.15,
+"x": "Petugas memeriksa isinya."
+},
+{
+"t0": 112.6,
+"t1": 114.33,
+"x": "Laporan dinyatakan valid,"
+},
+{
+"t0": 115.9,
+"t1": 120.25,
+"x": "diberi tingkat urgensi, lalu diteruskan ke SPPG."
+},
+{
+"t0": 121.4,
+"t1": 123.05,
+"x": "Setiap langkah tercatat."
+},
+{
+"t0": 124.4,
+"t1": 129.87,
+"x": "Laporan yang kurang jelas bisa ditolak, disertai alasan untuk pelapor."
+},
+{
+"t0": 130.4,
+"t1": 133.87,
+"x": "SPPG menerima laporan tanpa identitas pelapor."
+},
+{
+"t0": 135.0,
+"t1": 137.15,
+"x": "SPPG mulai menanganinya,"
+},
+{
+"t0": 138.0,
+"t1": 141.93,
+"x": "lalu memberi tanggapan. Laporan asli tetap utuh."
+},
+{
+"t0": 147.2,
+"t1": 151.07,
+"x": "Setelah perbaikan dipastikan, petugas menutup laporan,"
+},
+{
+"t0": 151.9,
+"t1": 154.73,
+"x": "dengan catatan hasil untuk pelapor."
+},
+{
+"t0": 158.1,
+"t1": 161.39,
+"x": "Kasus serius masuk Monitoring Eskalasi."
+},
+{
+"t0": 161.7,
+"t1": 166.99,
+"x": "Contoh ini berurgensi tinggi, dan diteruskan ke pihak kesehatan terkait."
+},
+{
+"t0": 167.9,
+"t1": 172.37,
+"x": "Aplikasi mencatat penanganan, bukan memberi diagnosis."
+},
+{
+"t0": 172.55,
+"t1": 173.86,
+"x": "Kembali ke Raka."
+},
+{
+"t0": 175.8,
+"t1": 180.01,
+"x": "Dari riwayat laporannya, ia tahu masalahnya sudah selesai,"
+},
+{
+"t0": 182.2,
+"t1": 184.13,
+"x": "membaca tanggapan SPPG,"
+},
+{
+"t0": 185.8,
+"t1": 190.65,
+"x": "dan melihat siapa menangani, kapan, dan apa tindakannya."
+},
+{
+"t0": 190.83,
+"t1": 194.06,
+"x": "Masyarakat pun bisa memantau, tanpa login."
+},
+{
+"t0": 195.0,
+"t1": 199.89,
+"x": "Terlihat berapa laporan masuk, terverifikasi, dan selesai,"
+},
+{
+"t0": 202.6,
+"t1": 205.77,
+"x": "juga sebaran kategori dan tren enam bulan."
+},
+{
+"t0": 208.6,
+"t1": 212.91,
+"x": "Semuanya data agregat, tanpa identitas siapa pun."
+},
+{
+"t0": 215.6,
+"t1": 219.33,
+"x": "Informasi makanan membantu orang tua memahami layanan."
+},
+{
+"t0": 221.1,
+"t1": 224.27,
+"x": "Laporan terstruktur lebih mudah diperiksa."
+},
+{
+"t0": 226.6,
+"t1": 230.35,
+"x": "Setiap laporan diverifikasi sebelum diteruskan."
+},
+{
+"t0": 232.1,
+"t1": 236.93,
+"x": "Laporan serius diprioritaskan, dengan penanggung jawab jelas."
+},
+{
+"t0": 237.6,
+"t1": 240.29,
+"x": "Pelapor bisa memantau sampai selesai."
+},
+{
+"t0": 243.1,
+"t1": 247.69,
+"x": "Dan publik melihat perkembangannya, tanpa data pribadi."
+},
+{
+"t0": 248.8,
+"t1": 253.27,
+"x": "Semua nyaman dipakai di HP, tablet, maupun desktop."
+},
+{
+"t0": 255.5,
+"t1": 256.45,
+"x": "Ke depan,"
+},
+{
+"t0": 257.8,
+"t1": 264.03,
+"x": "kami ingin menguji coba Rantang Terang bersama sekolah dan pengguna,"
+},
+{
+"t0": 264.3,
+"t1": 268.61,
+"x": "menjajaki integrasi dengan layanan resmi melalui kerja sama,"
+},
+{
+"t0": 270.8,
+"t1": 275.65,
+"x": "dan memperluas akses lewat bahasa daerah serta mode hemat kuota."
+},
+{
+"t0": 279.2,
+"t1": 285.47,
+"x": "Rantang Terang: setiap laporan tercatat, ditindaklanjuti, dan dapat dipantau."
+},
+{
+"t0": 285.7,
+"t1": 286.59,
+"x": "Terima kasih."
+}
+]
