@@ -1,0 +1,72 @@
+[
+{
+"t0": 60.3,
+"t1": 64.0,
+"k": "ALUR UTAMA · ORANG TUA",
+"h": "Masuk lewat HP",
+"s": "Akun demo · SD Uji Coba 1 (fiktif)"
+},
+{
+"t0": 64.1,
+"t1": 73.6,
+"k": "INFORMASI MAKANAN",
+"h": "Menu, gizi &\\Nperjalanan makanan",
+"s": ""
+},
+{
+"t0": 73.7,
+"t1": 79.7,
+"k": "BUAT LAPORAN",
+"h": "Validasi kolom wajib",
+"s": "Bagian yang kurang ditandai"
+},
+{
+"t0": 79.8,
+"t1": 92.0,
+"k": "ISI LAPORAN",
+"h": "Kategori, deskripsi,\\Ntanggal, foto",
+"s": "Foto opsional · gambar contoh"
+},
+{
+"t0": 92.1,
+"t1": 101.0,
+"k": "PEMERIKSAAN",
+"h": "Kemungkinan duplikat",
+"s": "Peringatan bantu, bukan penolakan"
+},
+{
+"t0": 101.1,
+"t1": 104.9,
+"k": "TERKIRIM",
+"h": "Nomor laporan unik",
+"s": "RT-261110-0027 · Menunggu Verifikasi"
+},
+{
+"t0": 124.1,
+"t1": 129.9,
+"k": "CABANG · LAPORAN BERBEDA",
+"h": "Ditolak + alasan",
+"s": "Alasan dapat dibaca pelapor"
+},
+{
+"t0": 172.1,
+"t1": 175.5,
+"k": "PELAPOR MEMANTAU",
+"h": "Riwayat laporan",
+"s": ""
+},
+{
+"t0": 175.6,
+"t1": 182.0,
+"k": "PELAPOR MEMANTAU",
+"h": "Hasil penyelesaian",
+"s": "RT-261110-0027"
+},
+{
+"t0": 182.1,
+"t1": 189.9,
+"k": "PELAPOR MEMANTAU",
+"h": "Tanggapan SPPG\\N& timeline",
+"s": "Waktu · pihak · tindakan"
+}
+]

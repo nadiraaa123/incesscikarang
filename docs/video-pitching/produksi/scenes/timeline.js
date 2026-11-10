@@ -1,0 +1,1 @@
+window.__start=()=>{const t0=performance.now();document.querySelectorAll('[data-in]').forEach(e=>{const i=+e.dataset.in*1000,o=e.dataset.out?+e.dataset.out*1000:null;setTimeout(()=>e.classList.add('in'),i);if(o)setTimeout(()=>e.classList.add('out'),o)})};

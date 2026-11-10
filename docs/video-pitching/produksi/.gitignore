@@ -1,0 +1,11 @@
+# Foto anggota tim, rekaman, dan render tidak di-commit (berkas besar / data pribadi).
+scenes/img/
+frames/
+clips/
+seg/
+chk/
+*.mp4
+*.jpg
+state.json
+nomor.txt
+id.txt

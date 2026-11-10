@@ -1,0 +1,81 @@
+NASKAH VOICE-OVER — Rantang Terang (target 4:50, 538 kata)
+Waktu = posisi di video. Baca tenang; jeda antarbaris sudah dihitung.
+
+[00:00] PERKENALAN TIM
+00:00.50–00:04.60  Kami adalah Incess Cikarang dari President University.
+00:05.20–00:10.60  Tim kami terdiri dari Helen Stephanis Simarmata sebagai Business Analyst,
+00:11.20–00:16.60  Dian Theresia Girsang sebagai Project Manager,
+00:17.20–00:22.60  dan Nadira Khumaira Putri sebagai Frontend & Backend.
+00:23.50–00:29.60  Bersama, kami membangun Rantang Terang untuk Web In Action 2026.
+
+[00:30] INTRODUCTION
+00:30.40–00:36.70  Rantang Terang adalah aplikasi web mobile-first untuk mendukung pemantauan layanan Makan Bergizi Gratis, atau MBG.
+00:37.00–00:41.80  Orang tua perlu tahu makanan anaknya, dan butuh saluran laporan yang jelas.
+00:42.00–00:46.80  Laporan harus ditindaklanjuti, dan publik perlu melihat perkembangannya tanpa data pribadi.
+00:47.00–00:55.20  Rantang Terang menghubungkan informasi makanan, laporan pengguna, verifikasi petugas, tindak lanjut SPPG atau Satuan Pelayanan Pemenuhan Gizi, dan transparansi publik.
+00:55.40–00:59.80  Prinsipnya: setiap laporan tercatat, ditindaklanjuti, dan dapat dipantau.
+
+[01:00] DEMO · ORANG TUA MEMBUAT LAPORAN
+01:00.30–01:04.00  Kita ikuti laporan Raka, akun demo orang tua.
+01:04.10–01:08.50  Di beranda, ia melihat menu hari ini beserta kandungan gizinya,
+01:08.60–01:13.60  serta perjalanan makanan dari dapur sampai dimakan siswa.
+01:13.70–01:16.10  Ia memilih Buat Laporan.
+01:16.20–01:19.70  Kolom wajib yang kosong langsung ditandai.
+01:19.80–01:21.60  Ia memilih Porsi makanan,
+01:21.70–01:26.90  lalu menulis: porsi yang diterima hari ini tampak lebih sedikit dibanding menu yang ditampilkan.
+01:27.00–01:32.00  mengisi tanggal, lalu menambah foto bukti yang bersifat opsional. Di sini gambar contoh.
+01:32.10–01:35.20  Saat dikirim, sistem memeriksa kemungkinan laporan serupa.
+01:35.30–01:41.00  Ini hanya peringatan bantu, bukan keputusan bahwa laporan palsu. Raka tetap mengirim laporan barunya.
+01:41.10–01:44.90  Laporan tercatat dengan nomor RT-261110-0027 dan berstatus Menunggu Verifikasi.
+
+[01:45] DEMO · VERIFIKASI PETUGAS & CABANG PENOLAKAN
+01:45.20–01:49.20  Beralih ke akun petugas sekolah: laporan masuk antrean verifikasi.
+01:49.30–01:52.30  Petugas memeriksa kategori, deskripsi, tanggal, dan bukti.
+01:52.40–01:55.70  Laporan dinilai valid, sehingga statusnya menjadi Terverifikasi.
+01:55.80–01:57.60  Petugas menetapkan urgensi Normal,
+01:57.70–02:01.20  lalu meneruskannya kepada SPPG.
+02:01.30–02:03.90  Setiap langkah tercatat di riwayat penanganan.
+02:04.10–02:09.90  Contoh lain: laporan yang kurang informasi ditolak, dan alasannya dapat dibaca pelapor.
+
+[02:10] DEMO · TINDAK LANJUT SPPG & CABANG ESKALASI
+02:10.20–02:14.70  Di akun Mitra SPPG, laporan yang diteruskan tampil tanpa identitas pelapor.
+02:14.80–02:17.70  SPPG menandai laporan Dalam Penanganan,
+02:17.80–02:24.40  lalu menulis tanggapan bahwa takaran porsi sudah dikalibrasi ulang. Tanggapan ini tidak mengubah laporan asli.
+02:24.50–02:26.90  Semuanya tercatat beserta waktu dan pihaknya.
+02:27.10–02:29.20  Kembali ke petugas sekolah.
+02:29.30–02:35.60  Setelah tindak lanjut dipantau, petugas menandai laporan Selesai dan menuliskan hasilnya untuk pelapor.
+02:35.70–02:37.90  Alur utama pun lengkap.
+02:38.10–02:41.40  Laporan serius dipantau di Monitoring Eskalasi.
+02:41.50–02:47.60  Pada kasus terpisah ini, petugas menetapkan urgensi Tinggi dan meneruskannya ke pihak kesehatan terkait sesuai prosedur.
+02:47.70–02:51.90  Penanggung jawab dan riwayat tercatat. Aplikasi tidak memberi diagnosis.
+
+[02:52] DEMO · PELAPOR MEMANTAU
+02:52.10–02:55.50  Kembali ke akun orang tua. Raka membuka Riwayat Laporan,
+02:55.60–02:58.70  memilih laporan RT-261110-0027,
+02:58.80–03:02.00  lalu melihat hasil penyelesaiannya,
+03:02.10–03:05.60  tanggapan dari SPPG,
+03:05.70–03:09.90  serta timeline lengkap: kapan, oleh siapa, dan apa tindakannya.
+
+[03:10] DEMO · DASHBOARD PUBLIK
+03:10.10–03:14.90  Masyarakat dapat membuka dashboard transparansi tanpa login.
+03:15.00–03:18.60  Data demo 90 hari: 21 laporan masuk, 16 terverifikasi.
+03:18.70–03:22.20  10 selesai, 6 masih ditangani; penyelesaian 63 persen.
+03:22.30–03:28.20  Ada juga statistik per kategori dan grafik perkembangan enam bulan.
+03:28.30–03:34.90  Definisi setiap angka ditulis jelas, dan yang ditampilkan hanya data agregat, tanpa identitas atau catatan pribadi.
+
+[03:35] SOROTAN FITUR UTAMA
+03:35.30–03:40.50  Rangkumannya: informasi makanan membantu pengguna memahami layanan yang diterima.
+03:40.80–03:46.00  Laporan terstruktur lebih mudah diperiksa.
+03:46.30–03:51.50  Verifikasi petugas memastikan setiap laporan diperiksa sebelum diteruskan.
+03:51.80–03:57.00  Eskalasi memprioritaskan laporan serius dengan penanggung jawab yang jelas.
+03:57.30–04:02.50  Pelapor dapat memantau status, tanggapan, dan penyelesaian.
+04:02.80–04:08.00  Transparansi publik menampilkan perkembangan tanpa membuka data pribadi.
+04:08.30–04:14.80  Dan semua tampilan menyesuaikan layar HP, tablet, maupun desktop.
+
+[04:15] RENCANA PENGEMBANGAN & PENUTUP
+04:15.30–04:17.40  Ke depan, ada tiga rencana.
+04:17.60–04:23.80  Pertama, uji coba bersama sekolah dan pengguna untuk menilai kemudahan, partisipasi, dan manfaat alur pelaporan.
+04:24.10–04:30.30  Kedua, menjajaki integrasi dengan layanan resmi yang relevan, melalui kerja sama dan akses yang diperlukan.
+04:30.60–04:38.30  Ketiga, memperluas akses dengan dukungan bahasa daerah dan mode hemat kuota.
+04:39.20–04:44.90  Rantang Terang: setiap laporan tercatat, ditindaklanjuti, dan dapat dipantau.
+04:45.20–04:49.60  Terima kasih. Kami Incess Cikarang dari President University.
