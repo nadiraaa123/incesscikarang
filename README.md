@@ -113,18 +113,20 @@ Total masuk, terverifikasi, dalam penanganan, selesai, per kategori, tren 6 bula
 ## Supabase (mode online)
 
 1. Buat project Supabase → **SQL Editor** → jalankan `supabase/schema.sql`, lalu `supabase/seed.sql` (data master sekolah uji coba).
-2. **Authentication → Providers → Email**: matikan *Confirm email* (akun memakai email sintetis `<nomor/ID>@akun.rantangterang.id`, tidak ada kotak masuk sungguhan).
+2. Pendaftaran memakai fungsi server `daftar_akun` (kode undangan + nomor WA + PIN), karena Supabase Auth menolak domain email sintetis `<nomor>@akun.rantangterang.id` pada `signUp`. Pengaturan *Confirm email* tidak perlu diubah.
 3. Buat akun demo dari komputer admin: `SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/buat-akun-demo.mjs`. (Pada project `rantang-terang` ketujuh akun demo sudah dibuat.)
 4. Isi `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY` di Vercel → redeploy.
 
 Uji skema & RLS di PostgreSQL lokal (tanpa Supabase): `PGHOST=... PGPORT=... bash supabase/tests/jalankan.sh` — 13 kelompok uji (akses anon, validasi server, cakupan per peran, jejak append-only, privasi statistik, storage, pendaftaran).
 
-> **Status:** project Supabase `rantang-terang` (region Singapura) sudah dibuat, `schema.sql` terpasang, dan 13 kelompok uji RLS dijalankan langsung di database Supabase (lulus, transaksi di-rollback). Frontend mode online diuji end-to-end terhadap Supabase sungguhan dengan Playwright: 32/32 lulus (login, laporan + foto ke Storage, verifikasi/penolakan, urgensi, eskalasi, tanggapan SPPG, catatan internal, penyelesaian, statistik publik). Data uji sudah dibersihkan. Di mode demo, pembatasan per peran hanya ditiru di browser — bukan pengamanan sungguhan.
+> **Status:** project Supabase `rantang-terang` (region Singapura) sudah dibuat, `schema.sql` terpasang, dan 13 kelompok uji RLS dijalankan langsung di database Supabase (lulus, transaksi di-rollback). Frontend mode online diuji end-to-end terhadap Supabase sungguhan dan situs produksi dengan Playwright: 32/32 lulus, ditambah alur pendaftaran 4/4 (login, laporan + foto ke Storage, verifikasi/penolakan, urgensi, eskalasi, tanggapan SPPG, catatan internal, penyelesaian, statistik publik). Data uji sudah dibersihkan. Di mode demo, pembatasan per peran hanya ditiru di browser — bukan pengamanan sungguhan.
 
 ## Keputusan terbuka (perlu tim/mentor)
 - Aturan urgensi resmi dan siapa pihak kesehatan per wilayah (saat ini: petugas memilih; Tinggi = eskalasi).
 - Perlu tidaknya SLA/batas waktu tindak lanjut (sengaja **tidak** dibuat agar tidak mengarang aturan).
 - PIN 6 digit sebagai kata sandi Supabase lemah untuk produksi; pertimbangkan OTP WhatsApp.
+- `daftar_akun` bisa dipanggil tanpa login (wajib kode undangan valid) dan belum dibatasi laju; kode undangan sebaiknya dibuat acak dan bisa dicabut.
+- Tujuh akun demo (PIN `123456`) aktif di situs live — hapus atau ganti PIN-nya sebelum dipakai warga sungguhan.
 - Fitur lama (menu, penilaian, poin, foto petugas, rujukan) masih memakai data lokal/demo, juga di mode online.
 
 ## Data sekolah & wilayah

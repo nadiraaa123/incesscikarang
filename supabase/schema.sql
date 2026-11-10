@@ -474,3 +474,38 @@ create policy "baca bukti sesuai hak laporan" on storage.objects for select to a
 alter function hari_ini_wib() set search_path = public;
 revoke execute on function peran_saya(), sekolah_saya(), sppg_saya(), faskes_saya(), boleh_lihat_laporan(uuid) from public, anon;
 grant execute on function peran_saya(), sekolah_saya(), sppg_saya(), faskes_saya(), boleh_lihat_laporan(uuid) to authenticated;
+
+-- Pendaftaran tanpa email sungguhan: Supabase Auth menolak domain email sintetis pada signUp,
+-- jadi akun dibuat di server setelah kode undangan, peran, nomor WA, dan PIN divalidasi.
+create or replace function daftar_akun(p_kode text, p_wa text, p_pin text, p_nama text, p_peran text)
+returns json language plpgsql security definer set search_path = public, extensions as $$
+declare u undangan; s sekolah; v_id uuid := gen_random_uuid(); v_email text;
+begin
+  if p_wa !~ '^08[0-9]{8,11}$' then raise exception 'Nomor WhatsApp harus diawali 08 dan berisi 10–13 angka.' using errcode = '22023'; end if;
+  if p_pin !~ '^[0-9]{6}$' then raise exception 'PIN harus 6 angka.' using errcode = '22023'; end if;
+  if char_length(btrim(coalesce(p_nama, ''))) > 60 then raise exception 'Nama tampilan maksimal 60 karakter.' using errcode = '22023'; end if;
+  select * into u from undangan where lower(kode) = lower(btrim(p_kode));
+  if not found then raise exception 'Kode undangan tidak dikenali.' using errcode = '22023'; end if;
+  select * into s from sekolah where id = u.sekolah_id;
+  if (u.tipe = 'staf' and p_peran not in ('guru','petugas'))
+     or (u.tipe = 'kelas' and s.jenjang in ('PAUD','SD','SLB') and p_peran <> 'ortu')
+     or (u.tipe = 'kelas' and s.jenjang not in ('PAUD','SD','SLB') and p_peran <> 'siswa') then
+    raise exception 'Peran tidak sesuai kode undangan.' using errcode = '22023';
+  end if;
+  v_email := p_wa || '@akun.rantangterang.id'; -- sama dengan emailAkun() di src/lib/supabase.ts
+  if exists (select 1 from auth.users where email = v_email) then
+    raise exception 'Nomor ini sudah terdaftar. Silakan masuk.' using errcode = '23505';
+  end if;
+  insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+    raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
+    confirmation_token, recovery_token, email_change, email_change_token_new, email_change_token_current, reauthentication_token, phone_change, phone_change_token)
+  values ('00000000-0000-0000-0000-000000000000', v_id, 'authenticated', 'authenticated', v_email, crypt(p_pin, gen_salt('bf')), now(),
+    '{"provider":"email","providers":["email"]}', '{}', now(), now(), '', '', '', '', '', '', '', '');
+  insert into auth.identities (id, provider_id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
+  values (gen_random_uuid(), v_id::text, v_id, jsonb_build_object('sub', v_id::text, 'email', v_email, 'email_verified', true), 'email', now(), now(), now());
+  insert into profil (user_id, nama_tampil, peran, sekolah_id, kelas)
+  values (v_id, coalesce(nullif(btrim(p_nama), ''), 'Pengguna'), p_peran, u.sekolah_id, u.kelas);
+  return json_build_object('ok', true);
+end $$;
+revoke execute on function daftar_akun(text, text, text, text, text) from public;
+grant execute on function daftar_akun(text, text, text, text, text) to anon, authenticated;
