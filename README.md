@@ -114,12 +114,12 @@ Total masuk, terverifikasi, dalam penanganan, selesai, per kategori, tren 6 bula
 
 1. Buat project Supabase → **SQL Editor** → jalankan `supabase/schema.sql`, lalu `supabase/seed.sql` (data master sekolah uji coba).
 2. **Authentication → Providers → Email**: matikan *Confirm email* (akun memakai email sintetis `<nomor/ID>@akun.rantangterang.id`, tidak ada kotak masuk sungguhan).
-3. Buat akun demo dari komputer admin: `SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/buat-akun-demo.mjs`.
+3. Buat akun demo dari komputer admin: `SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/buat-akun-demo.mjs`. (Pada project `rantang-terang` ketujuh akun demo sudah dibuat.)
 4. Isi `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY` di Vercel → redeploy.
 
 Uji skema & RLS di PostgreSQL lokal (tanpa Supabase): `PGHOST=... PGPORT=... bash supabase/tests/jalankan.sh` — 13 kelompok uji (akses anon, validasi server, cakupan per peran, jejak append-only, privasi statistik, storage, pendaftaran).
 
-> **Status jujur:** skema SQL sudah diuji di PostgreSQL 16 lokal dengan tiruan `auth`/`storage`. Adaptor frontend Supabase (`src/lib/repo/supabase.ts`, `src/lib/auth.ts`) lolos type-check tetapi **belum diuji terhadap project Supabase sungguhan** karena kredensial belum tersedia. Di mode demo, pembatasan per peran hanya ditiru di browser — bukan pengamanan sungguhan.
+> **Status:** project Supabase `rantang-terang` (region Singapura) sudah dibuat, `schema.sql` terpasang, dan 13 kelompok uji RLS dijalankan langsung di database Supabase (lulus, transaksi di-rollback). Frontend mode online diuji end-to-end terhadap Supabase sungguhan dengan Playwright: 32/32 lulus (login, laporan + foto ke Storage, verifikasi/penolakan, urgensi, eskalasi, tanggapan SPPG, catatan internal, penyelesaian, statistik publik). Data uji sudah dibersihkan. Di mode demo, pembatasan per peran hanya ditiru di browser — bukan pengamanan sungguhan.
 
 ## Keputusan terbuka (perlu tim/mentor)
 - Aturan urgensi resmi dan siapa pihak kesehatan per wilayah (saat ini: petugas memilih; Tinggi = eskalasi).

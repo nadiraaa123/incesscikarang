@@ -469,3 +469,8 @@ create policy "baca bukti sesuai hak laporan" on storage.objects for select to a
     or exists (select 1 from public.laporan l where l.foto_path = storage.objects.name and public.boleh_lihat_laporan(l.id))
   )
 );
+
+-- Pengetatan (temuan Supabase security advisor): fungsi bantu cakupan hanya untuk pengguna yang login
+alter function hari_ini_wib() set search_path = public;
+revoke execute on function peran_saya(), sekolah_saya(), sppg_saya(), faskes_saya(), boleh_lihat_laporan(uuid) from public, anon;
+grant execute on function peran_saya(), sekolah_saya(), sppg_saya(), faskes_saya(), boleh_lihat_laporan(uuid) to authenticated;
