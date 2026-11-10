@@ -1,4 +1,4 @@
-export type Peran = 'ortu' | 'siswa' | 'guru' | 'petugas' | 'sppg'
+export type Peran = 'ortu' | 'siswa' | 'guru' | 'petugas' | 'sppg' | 'kesehatan'
 export type Jenjang = 'PAUD' | 'SD' | 'SMP' | 'SMA' | 'SLB' | 'Pesantren' | 'MTs'
 export type Kategori = 'Makanan pokok' | 'Lauk pauk' | 'Sayur' | 'Buah' | 'Susu'
 
@@ -22,6 +22,8 @@ export interface Sekolah {
   alamat?: string
   sumberUrl?: string
   sppgId?: string
+  /** Fasilitas kesehatan rujukan wilayah sekolah (dipakai saat eskalasi). */
+  faskesId?: string
   siswa: number
   akunTerdaftar: number
   pelaporAktifSeed: number
@@ -67,7 +69,14 @@ export interface Pengguna {
   anak?: string
   waOrtu?: string
   sppgId?: string
+  faskesId?: string
   demo?: boolean
+}
+
+export interface Faskes {
+  id: string
+  nama: string
+  kab: string
 }
 
 export interface Undangan {
@@ -157,6 +166,67 @@ export interface Rujukan {
   dicabut: boolean
 }
 
+/* ---------- Laporan masalah (validasi, moderasi, eskalasi) ---------- */
+
+export type KategoriLaporan = 'kualitas' | 'kebersihan' | 'porsi' | 'keterlambatan' | 'kondisi'
+
+export type StatusLaporan =
+  | 'menunggu_verifikasi'
+  | 'terverifikasi'
+  | 'ditolak'
+  | 'diteruskan_sppg'
+  | 'diteruskan_kesehatan'
+  | 'dalam_penanganan'
+  | 'selesai'
+
+/** Urgensi ditetapkan petugas; terpisah dari status penanganan. */
+export type Urgensi = 'normal' | 'sedang' | 'tinggi'
+
+export interface Pengaduan {
+  id: string
+  /** Nomor unik yang dilihat pelapor, mis. RT-261110-0007 */
+  nomor: string
+  pelaporId: string
+  schoolId: string
+  kategori: KategoriLaporan
+  deskripsi: string
+  tanggalKejadian: string
+  fotoUrl?: string
+  dibuat: string
+  diperbarui: string
+  status: StatusLaporan
+  urgensi?: Urgensi
+  alasanTolak?: string
+  hasil?: string
+  /** Pihak yang bertanggung jawab */
+  petugasId?: string
+  sppgId?: string
+  faskesId?: string
+  /** Pernah diteruskan ke pihak kesehatan (tetap tercatat walau status sudah berubah) */
+  keKesehatan: boolean
+  /** Id laporan lain yang mirip. Hanya penanda bantu untuk petugas, bukan vonis. */
+  kemungkinanDuplikat: string[]
+  demo?: boolean
+}
+
+export type JenisJejak = 'dibuat' | 'status' | 'urgensi' | 'catatan' | 'tanggapan'
+
+/** Jejak penanganan bersifat append-only: tidak pernah diubah atau dihapus. */
+export interface JejakPengaduan {
+  id: string
+  pengaduanId: string
+  waktu: string
+  aktorPeran: Peran
+  aktorLabel: string
+  jenis: JenisJejak
+  dari?: StatusLaporan
+  ke?: StatusLaporan
+  urgensi?: Urgensi
+  catatan?: string
+  /** false = catatan internal (tidak tampil ke pelapor) */
+  untukPelapor: boolean
+}
+
 export interface DB {
   versi: number
   wilayah: Wilayah[]
@@ -173,4 +243,7 @@ export interface DB {
   riwayat: Riwayat[]
   peringatan: Peringatan[]
   rujukan: Rujukan[]
+  faskes: Faskes[]
+  pengaduan: Pengaduan[]
+  jejak: JejakPengaduan[]
 }

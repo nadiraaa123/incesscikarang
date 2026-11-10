@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { LogOut, MessageSquareReply, Award } from 'lucide-react'
-import { Button, Card, Chip, H2, Page, Toast, TopBar, cx } from '../components/ui'
+import { LogOut, MessageSquareReply, Award, ClipboardList, Utensils, MessagesSquare } from 'lucide-react'
+import { Button, Card, Chip, H2, Kosong, Memuat, Page, Pesan, Toast, TopBar, cx } from '../components/ui'
+import { KartuLaporan } from '../components/laporan'
+import { repo, useKueri } from '../lib/repo'
+import { STATUS_AKTIF } from '../lib/pengaduan'
 import { ItemMasukan } from '../components/mbg'
 import { useSesi, keluar } from '../lib/auth'
 import { beriTanggapan, daftarMasukan, hariOperasional, menuHariIni, simpanMenu, sppgById, tanggapanUntuk, useDB } from '../lib/db'
@@ -19,6 +22,8 @@ export default function Sppg() {
   const menu = user?.sppgId ? menuHariIni(d, user.sppgId) : undefined
   const [items, setItems] = useState(menu?.items ?? [])
   const [gizi, setGizi] = useState(menu?.gizi ?? { energi: 0, protein: 0, lemak: 0, karbo: 0 })
+  const [tab, setTab] = useState<'laporan' | 'masukan' | 'menu'>('laporan')
+  const q = useKueri(() => (user?.peran === 'sppg' ? repo.daftar(user, 'mitra') : Promise.resolve([])), [user?.id])
   if (!user) return <Navigate to="/masuk" replace />
   if (user.peran !== 'sppg') return <Navigate to="/app" replace />
   const sppg = sppgById(d, user.sppgId)!
@@ -29,17 +34,35 @@ export default function Sppg() {
   return (
     <>
       <TopBar />
-      <Page>
+      <Page lebar="dasbor">
         <p className="text-xs text-muted">{fmtTanggal(hariOperasional())}</p>
         <h1 className="text-xl font-extrabold text-ink">{sppg.nama}</h1>
         <p className="text-sm text-muted">Mitra SPPG · melayani {sekolah.length} sekolah contoh</p>
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <Card className="p-3"><p className="text-2xl font-extrabold tabular-nums text-ink">{belum.length}</p><p className="text-xs text-muted">Masukan menunggu tanggapan</p></Card>
-          <Card className="p-3"><p className="text-2xl font-extrabold tabular-nums text-ink">{masukan.length - belum.length}</p><p className="text-xs text-muted">Sudah ditanggapi</p></Card>
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          <Card className="p-3"><p className="text-2xl font-extrabold tabular-nums text-ink">{(q.data ?? []).filter((p) => STATUS_AKTIF.includes(p.status)).length}</p><p className="text-xs leading-tight text-muted">Laporan perlu ditangani</p></Card>
+          <Card className="p-3"><p className="text-2xl font-extrabold tabular-nums text-ink">{belum.length}</p><p className="text-xs leading-tight text-muted">Masukan menu belum ditanggapi</p></Card>
+          <Card className="p-3"><p className="text-2xl font-extrabold tabular-nums text-ink">{masukan.length - belum.length}</p><p className="text-xs leading-tight text-muted">Masukan sudah ditanggapi</p></Card>
         </div>
-        <p className="mt-2 flex items-center gap-1 text-xs text-muted"><Award size={13} className="text-sun" /> Tanggapi semua masukan dalam 24 jam selama sebulan untuk badge publik “Dapur Responsif”.</p>
 
-        <H2>Kotak masukan</H2>
+        <div className="mt-5 grid grid-cols-3 rounded-xl border border-line bg-white p-1" role="tablist">
+          {([['laporan', 'Laporan', ClipboardList], ['masukan', 'Masukan menu', MessagesSquare], ['menu', 'Menu & gizi', Utensils]] as const).map(([k, l, I]) => (
+            <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)} className={cx('flex h-11 items-center justify-center gap-1.5 rounded-lg text-[13px] font-bold', tab === k ? 'bg-leaf text-white' : 'text-muted')}><I size={15} className="hidden sm:block" />{l}</button>
+          ))}
+        </div>
+
+        {tab === 'laporan' && (
+          <>
+            <H2>Laporan yang diteruskan ke dapur ini</H2>
+            <p className="-mt-2 mb-3 text-sm text-muted">Sudah diverifikasi petugas sekolah. Identitas pelapor tidak dibagikan. Buka laporan untuk menandai penanganan dan memberi tanggapan.</p>
+            {q.memuat && !q.data ? <Memuat /> : q.galat ? <Pesan jenis="galat">{q.galat}</Pesan> : (q.data ?? []).length ? (
+              <div className="grid gap-3 md:grid-cols-2">{[...(q.data ?? [])].sort((a, b) => Number(b.status !== 'selesai') - Number(a.status !== 'selesai') || b.diperbarui.localeCompare(a.diperbarui)).map((p) => <KartuLaporan key={p.id} p={p} sekolah={d.sekolah.find((s) => s.id === p.schoolId)?.nama} tampilUrgensi />)}</div>
+            ) : <Kosong ikon={<ClipboardList />} judul="Belum ada laporan yang diteruskan" />}
+          </>
+        )}
+
+        {tab === 'masukan' && <>
+        <p className="mt-4 flex items-center gap-1 text-xs text-muted"><Award size={13} className="text-sun" /> Tanggapi semua masukan dalam 24 jam selama sebulan untuk badge publik “Dapur Responsif”.</p>
+        <H2>Kotak masukan menu</H2>
         <div className="space-y-3">
           {masukan.map((m) => (
             <div key={m.id}>
@@ -66,12 +89,15 @@ export default function Sppg() {
           ))}
         </div>
 
+        </>}
+
+        {tab === 'menu' && <>
         <H2>Menu & gizi hari ini</H2>
         <Card>
           <p className="text-xs text-muted">Menu ini tampil ke orang tua, siswa, sekolah, dan publik.</p>
           <div className="mt-3 space-y-2">
             {items.map((it, i) => (
-              <div key={i} className="grid grid-cols-[1fr_88px] gap-2">
+              <div key={i} className="grid grid-cols-[minmax(0,1fr)_88px] gap-2">
                 <input value={it.nama} onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, nama: e.target.value } : x)))} className="h-11 rounded-lg border border-line px-3 text-sm" aria-label={`Nama menu ${i + 1}`} />
                 <input value={it.porsi} onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, porsi: e.target.value } : x)))} className="h-11 rounded-lg border border-line px-2 text-sm" aria-label={`Porsi menu ${i + 1}`} />
                 <select value={it.kategori} onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, kategori: e.target.value as never } : x)))} className="col-span-2 -mt-1 h-9 rounded-lg border border-line bg-cream px-2 text-xs" aria-label={`Kategori menu ${i + 1}`}>
@@ -80,7 +106,7 @@ export default function Sppg() {
               </div>
             ))}
           </div>
-          <div className="mt-3 grid grid-cols-4 gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {(Object.keys(gizi) as (keyof typeof gizi)[]).map((k) => (
               <label key={k} className="text-[11px] capitalize text-muted">{k}
                 <input type="number" value={gizi[k]} onChange={(e) => setGizi({ ...gizi, [k]: +e.target.value })} className="mt-1 h-10 w-full rounded-lg border border-line px-2 text-sm text-ink" />
@@ -99,7 +125,8 @@ export default function Sppg() {
           </div>
         </Card>
         <div className="mt-3"><Chip jenis="info">Integrasi data resmi BGN belum tersedia pada versi ini</Chip></div>
-        <button onClick={() => keluar()} className="mt-8 flex w-full items-center justify-center gap-2 text-sm font-semibold text-muted"><LogOut size={15} /> Keluar</button>
+        </>}
+        <button onClick={() => keluar()} className="mt-8 flex min-h-[44px] w-full items-center justify-center gap-2 text-sm font-semibold text-muted"><LogOut size={15} /> Keluar</button>
         <Toast pesan={toast} onClose={() => setToast('')} />
       </Page>
     </>

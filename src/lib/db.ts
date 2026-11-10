@@ -1,13 +1,14 @@
 import { useSyncExternalStore } from 'react'
 import type { DB, LaporanKondisi, Penilaian, PoinLog, Pengguna, Riwayat, Sekolah } from './types'
-import { buatSeed } from './seed'
+import { buatSeed, FASKES_DEMO, KESEHATAN_DEMO } from './seed'
+import { buatSeedPengaduan } from './seed-pengaduan'
 import { lastSchoolDay, monthKey, monthsBack, nowTime, schoolDaysBefore, today } from './date'
 
 /**
  * Lapisan data. Saat ini memakai localStorage + data contoh agar aplikasi langsung berjalan tanpa backend.
  * Skema yang sama tersedia untuk Supabase di /supabase/schema.sql (tahap berikutnya).
  */
-const KEY = 'rantang-terang-db-v2'
+const KEY = 'rantang-terang-db-v2' // kunci tetap; versi skema ada di field `versi`
 let state: DB = load()
 const listeners = new Set<() => void>()
 
@@ -16,14 +17,32 @@ function load(): DB {
     const raw = localStorage.getItem(KEY)
     if (raw) {
       const parsed = JSON.parse(raw) as DB
-      if (parsed.versi === 2) return parsed
+      if (parsed.versi === 3) return parsed
+      if (parsed.versi === 2) return migrasiV3(parsed)
     }
   } catch { /* abaikan */ }
   return buatSeed()
 }
 
+/** v2 → v3: tambah laporan masalah, faskes, dan akun pihak kesehatan tanpa menghapus data demo lama. */
+function migrasiV3(d: DB): DB {
+  const { pengaduan, jejak } = buatSeedPengaduan()
+  return {
+    ...d,
+    versi: 3,
+    faskes: [FASKES_DEMO],
+    pengaduan,
+    jejak,
+    pengguna: d.pengguna.some((p) => p.id === KESEHATAN_DEMO.id) ? d.pengguna : [...d.pengguna, KESEHATAN_DEMO],
+    sekolah: d.sekolah.map((s) => (s.wilayahId === 'uji' && !s.faskesId ? { ...s, faskesId: FASKES_DEMO.id } : s)),
+  }
+}
+
+let gagalSimpan = false
+/** true bila penulisan terakhir ke localStorage gagal (penuh/terblokir): data hanya ada di memori. */
+export const simpanTerakhirGagal = () => gagalSimpan
 function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(state)) } catch { /* penyimpanan penuh/terblokir */ }
+  try { localStorage.setItem(KEY, JSON.stringify(state)); gagalSimpan = false } catch { gagalSimpan = true }
 }
 
 export function mutate(fn: (d: DB) => void) {

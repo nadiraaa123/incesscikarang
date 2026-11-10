@@ -1,7 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2, Clock, ExternalLink, Home, School, ClipboardPen, UserRound, AlertTriangle, MessageSquareReply, Star, Info } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Clock, ExternalLink, Home, School, ClipboardPen, UserRound, AlertTriangle, MessageSquareReply, Star, Info, BarChart3, History, ShieldCheck, Siren, LogIn, Loader2, XCircle, type LucideIcon } from 'lucide-react'
 import { useSesi } from '../lib/auth'
+import type { Pengguna } from '../lib/types'
 
 export const panggilan = (nama: string) => {
   const w = nama.replace(/\(.*?\)/g, '').trim().split(/\s+/)
@@ -13,7 +14,7 @@ export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Bool
 /* ---------- Identitas ---------- */
 
 export function Logo({ size = 32 }: { size?: number }) {
-  return <img src="/logo.png" width={size} height={size} alt="" aria-hidden="true" className="shrink-0 object-contain" />
+  return <img src="/logo-96.png" width={size} height={size} decoding="async" alt="" aria-hidden="true" className="shrink-0 object-contain" />
 }
 
 export function Brand() {
@@ -27,35 +28,86 @@ export function Brand() {
 
 /* ---------- Kerangka halaman ---------- */
 
+/** Navigasi sesuai peran. Dipakai bersama oleh bar bawah (HP) dan header (tablet/desktop). */
+export function menuNavigasi(user?: Pengguna): { to: string; label: string; icon: LucideIcon; end?: boolean }[] {
+  if (!user) return [
+    { to: '/', label: 'Beranda', icon: Home, end: true },
+    { to: '/sekolah', label: 'Sekolah', icon: School },
+    { to: '/transparansi', label: 'Transparansi', icon: BarChart3 },
+    { to: '/masuk', label: 'Masuk', icon: LogIn },
+  ]
+  if (user.peran === 'petugas') return [
+    { to: '/app', label: 'Beranda', icon: Home, end: true },
+    { to: '/petugas/verifikasi', label: 'Verifikasi', icon: ShieldCheck },
+    { to: '/petugas/eskalasi', label: 'Eskalasi', icon: Siren },
+    { to: '/transparansi', label: 'Publik', icon: BarChart3 },
+    { to: '/app/profil', label: 'Saya', icon: UserRound },
+  ]
+  if (user.peran === 'sppg') return [
+    { to: '/', label: 'Beranda', icon: Home, end: true },
+    { to: '/mitra/sppg', label: 'Dasbor SPPG', icon: ClipboardPen },
+    { to: '/sekolah', label: 'Sekolah', icon: School },
+    { to: '/transparansi', label: 'Publik', icon: BarChart3 },
+  ]
+  if (user.peran === 'kesehatan') return [
+    { to: '/', label: 'Beranda', icon: Home, end: true },
+    { to: '/mitra/kesehatan', label: 'Kasus', icon: Siren },
+    { to: '/transparansi', label: 'Publik', icon: BarChart3 },
+  ]
+  return [
+    { to: '/app', label: 'Beranda', icon: Home, end: true },
+    { to: '/lapor/baru', label: 'Lapor', icon: ClipboardPen },
+    { to: '/laporan', label: 'Riwayat', icon: History },
+    { to: '/transparansi', label: 'Publik', icon: BarChart3 },
+    { to: '/app/profil', label: 'Saya', icon: UserRound },
+  ]
+}
+
+export const berandaPeran = (user?: Pengguna) => (!user ? '/' : user.peran === 'sppg' ? '/mitra/sppg' : user.peran === 'kesehatan' ? '/mitra/kesehatan' : '/app')
+
+function NavDesktop() {
+  const user = useSesi()
+  return (
+    <nav className="hidden items-center gap-1 md:flex" aria-label="Navigasi utama">
+      {menuNavigasi(user).filter((m) => m.to !== '/masuk' && m.to !== '/app/profil').map(({ to, label, end }) => (
+        <NavLink key={to + label} to={to} end={end} className={({ isActive }) => cx('rounded-lg px-3 py-2 text-sm font-semibold', isActive ? 'bg-leaf-soft text-leaf' : 'text-muted hover:text-ink')}>{label}</NavLink>
+      ))}
+    </nav>
+  )
+}
+
+function TombolAkun() {
+  const user = useSesi()
+  return user ? (
+    <Link to={user.peran === 'sppg' || user.peran === 'kesehatan' ? berandaPeran(user) : '/app/profil'} className="flex min-h-[40px] items-center gap-2 rounded-full border border-line bg-white py-1 pl-1 pr-3 text-sm font-semibold text-ink">
+      <span className="grid h-7 w-7 place-items-center rounded-full bg-leaf-soft text-xs font-bold text-leaf">{user.nama.slice(0, 1)}</span>
+      <span className="max-w-[110px] truncate">{panggilan(user.nama)}</span>
+    </Link>
+  ) : (
+    <Link to="/masuk" className="rounded-lg px-3 py-2 text-sm font-bold text-leaf hover:bg-leaf-soft">Masuk</Link>
+  )
+}
+
 export function TopBar({ title, back }: { title?: string; back?: boolean | string }) {
   const nav = useNavigate()
-  const user = useSesi()
-  if (title) {
-    return (
-      <header className="sticky top-0 z-20 border-b border-line bg-cream/95 backdrop-blur">
-        <div className="mx-auto flex h-14 w-full max-w-[480px] items-center gap-2 px-4">
-          {back && (
-            <button onClick={() => (typeof back === 'string' ? nav(back) : nav(-1))} className="-ml-2 rounded-lg p-2 text-ink hover:bg-white" aria-label="Kembali">
-              <ArrowLeft size={20} />
-            </button>
-          )}
-          <h1 className="truncate text-[17px] font-bold text-ink">{title}</h1>
-        </div>
-      </header>
-    )
-  }
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-cream/95 backdrop-blur">
-      <div className="mx-auto flex h-14 w-full max-w-[480px] items-center justify-between px-4">
-        <Brand />
-        {user ? (
-          <Link to={user.peran === 'sppg' ? '/mitra/sppg' : '/app/profil'} className="flex items-center gap-2 rounded-full border border-line bg-white py-1 pl-1 pr-3 text-sm font-semibold text-ink">
-            <span className="grid h-7 w-7 place-items-center rounded-full bg-leaf-soft text-xs font-bold text-leaf">{user.nama.slice(0, 1)}</span>
-            {panggilan(user.nama)}
-          </Link>
-        ) : (
-          <Link to="/masuk" className="rounded-lg px-3 py-2 text-sm font-bold text-leaf hover:bg-leaf-soft">Masuk</Link>
-        )}
+      <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-2 px-4">
+        {title ? (
+          <div className="flex min-w-0 items-center gap-1">
+            {back && (
+              <button onClick={() => (typeof back === 'string' ? nav(back) : window.history.length > 1 ? nav(-1) : nav('/'))} className="-ml-2 grid h-11 w-11 place-items-center rounded-lg text-ink hover:bg-white" aria-label="Kembali">
+                <ArrowLeft size={20} />
+              </button>
+            )}
+            <span className="hidden md:block"><Logo size={30} /></span>
+            <h1 className="truncate text-[17px] font-bold text-ink">{title}</h1>
+          </div>
+        ) : <Brand />}
+        <div className="flex items-center gap-2">
+          <NavDesktop />
+          <TombolAkun />
+        </div>
       </div>
     </header>
   )
@@ -63,17 +115,12 @@ export function TopBar({ title, back }: { title?: string; back?: boolean | strin
 
 export function BottomNav() {
   const user = useSesi()
-  const items = [
-    { to: '/', label: 'Beranda', icon: Home, end: true },
-    { to: '/sekolah', label: 'Sekolah', icon: School },
-    { to: user ? (user.peran === 'sppg' ? '/mitra/sppg' : '/app') : '/masuk', label: user?.peran === 'sppg' ? 'Mitra' : 'Lapor', icon: ClipboardPen },
-    { to: user ? (user.peran === 'sppg' ? '/mitra/sppg' : '/app/profil') : '/masuk?ke=profil', label: 'Saya', icon: UserRound },
-  ]
+  const items = menuNavigasi(user)
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white" aria-label="Navigasi utama">
-      <div className="mx-auto grid h-16 w-full max-w-[480px] grid-cols-4">
+    <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white pb-[env(safe-area-inset-bottom)] md:hidden" aria-label="Navigasi utama">
+      <div className="mx-auto grid h-16 w-full max-w-[560px]" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
         {items.map(({ to, label, icon: Icon, end }) => (
-          <NavLink key={label} to={to} end={end} className={({ isActive }) => cx('flex flex-col items-center justify-center gap-1 text-[11px] font-semibold', isActive ? 'text-leaf' : 'text-muted')}>
+          <NavLink key={to + label} to={to} end={end} className={({ isActive }) => cx('flex flex-col items-center justify-center gap-1 text-[11px] font-semibold', isActive ? 'text-leaf' : 'text-muted')}>
             <Icon size={21} strokeWidth={2} />
             {label}
           </NavLink>
@@ -83,10 +130,11 @@ export function BottomNav() {
   )
 }
 
-export function Page({ children, nav = true, className }: { children: ReactNode; nav?: boolean; className?: string }) {
+/** lebar: 'baca' untuk halaman formulir/konten, 'dasbor' untuk daftar & dasbor (melebar di desktop). */
+export function Page({ children, nav = true, className, lebar = 'baca' }: { children: ReactNode; nav?: boolean; className?: string; lebar?: 'baca' | 'dasbor' }) {
   return (
     <>
-      <main className={cx('mx-auto w-full max-w-[480px] px-4', className?.includes('pt-0') ? '' : 'pt-4', nav ? 'pb-24' : 'pb-10', className)}>{children}</main>
+      <main className={cx('mx-auto w-full px-4', lebar === 'dasbor' ? 'max-w-[560px] md:max-w-3xl lg:max-w-5xl' : 'max-w-[560px] md:max-w-2xl', className?.includes('pt-0') ? '' : 'pt-4', nav ? 'pb-24 md:pb-12' : 'pb-10', className)}>{children}</main>
       {nav && <BottomNav />}
     </>
   )
@@ -254,7 +302,7 @@ export function Toast({ pesan, onClose }: { pesan: string; onClose: () => void }
   }, [pesan, onClose])
   if (!pesan) return null
   return (
-    <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-20 z-40 mx-auto w-[calc(100%-2rem)] max-w-[448px] rounded-xl bg-ink px-4 py-3 text-sm font-semibold text-white shadow-lg">
+    <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-20 z-40 mx-auto w-[calc(100%-2rem)] max-w-[448px] rounded-xl bg-ink px-4 py-3 text-sm font-semibold text-white shadow-lg md:bottom-6">
       {pesan}
     </div>
   )
@@ -272,3 +320,31 @@ export async function kompresFoto(file: File, maks = 720): Promise<string> {
   URL.revokeObjectURL(url)
   return c.toDataURL('image/jpeg', 0.72)
 }
+
+/* ---------- Status muat & pesan ---------- */
+
+export function Memuat({ teks = 'Memuat data…' }: { teks?: string }) {
+  return (
+    <div role="status" aria-live="polite" className="flex items-center justify-center gap-2 py-10 text-sm font-semibold text-muted">
+      <Loader2 size={18} className="animate-spin text-leaf" /> {teks}
+    </div>
+  )
+}
+
+export function Pesan({ jenis, children, aksi }: { jenis: 'galat' | 'berhasil' | 'info' | 'peringatan'; children: ReactNode; aksi?: ReactNode }) {
+  const gaya = {
+    galat: ['border-brick/30 bg-brick-soft text-ink', XCircle, 'text-brick'],
+    berhasil: ['border-leaf/30 bg-leaf-soft text-ink', CheckCircle2, 'text-leaf'],
+    info: ['border-slate2/20 bg-slate2-soft text-ink', Info, 'text-slate2'],
+    peringatan: ['border-sun/40 bg-sun-soft text-ink', AlertTriangle, 'text-[#8A5D06]'],
+  } as const
+  const [cls, Icon, warna] = gaya[jenis]
+  return (
+    <div role={jenis === 'galat' ? 'alert' : 'status'} className={cx('flex gap-2.5 rounded-xl border p-3 text-sm leading-relaxed', cls)}>
+      <Icon size={18} className={cx('mt-0.5 shrink-0', warna)} />
+      <div className="min-w-0 flex-1">{children}{aksi && <div className="mt-2">{aksi}</div>}</div>
+    </div>
+  )
+}
+
+export const kelasInput = 'w-full rounded-xl border bg-white px-3 text-[16px] outline-none focus:border-leaf focus:ring-2 focus:ring-leaf/15'

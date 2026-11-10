@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { Award, CalendarCheck, Eye, Lock, LogOut, Star, Trophy } from 'lucide-react'
 import { Card, Chip, H2, Page, TopBar, cx } from '../components/ui'
 import { useSesi, keluar, labelPeran } from '../lib/auth'
@@ -14,6 +14,7 @@ export default function Profile() {
   const [tab, setTab] = useState<'laporan' | 'poin'>('laporan')
   if (!user) return <Navigate to="/masuk?ke=profil" replace />
   if (user.peran === 'sppg') return <Navigate to="/mitra/sppg" replace />
+  if (user.peran === 'kesehatan') return <Navigate to="/mitra/kesehatan" replace />
   const pp = profilPoin(d, user.id)
   const st = streak(d, user.id)
   const s = sekolahById(d, user.schoolId)
@@ -87,10 +88,12 @@ export default function Profile() {
           })}
         </div>
 
+        {user.peran !== 'petugas' && <Link to="/laporan" className="mt-6 flex min-h-[48px] items-center justify-between rounded-xl border border-line bg-white px-4 font-bold text-ink hover:border-leaf">Riwayat laporan masalah <span className="text-leaf">→</span></Link>}
+
         <div className="mt-6 grid grid-cols-2 rounded-xl border border-line bg-white p-1" role="tablist">
           {(['laporan', 'poin'] as const).map((t) => (
             <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={cx('h-10 rounded-lg text-sm font-bold', tab === t ? 'bg-leaf text-white' : 'text-muted')}>
-              {t === 'laporan' ? 'Laporanku' : 'Riwayat poin'}
+              {t === 'laporan' ? 'Laporan harian' : 'Riwayat poin'}
             </button>
           ))}
         </div>
@@ -111,7 +114,7 @@ export default function Profile() {
             ))}
           </ul>
         </Card>
-        <button onClick={() => keluar()} className="mt-6 flex w-full items-center justify-center gap-2 text-sm font-semibold text-muted"><LogOut size={15} /> Keluar</button>
+        <button onClick={() => keluar()} className="mt-6 flex min-h-[44px] w-full items-center justify-center gap-2 text-sm font-semibold text-muted"><LogOut size={15} /> Keluar</button>
       </Page>
     </>
   )

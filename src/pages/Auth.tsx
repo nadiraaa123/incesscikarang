@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { CheckCircle2, KeyRound, School, ShieldCheck, Lock } from 'lucide-react'
-import { Brand, Button, Card, Page, TopBar, cx } from '../components/ui'
-import { daftarPengguna, getDB, sekolahById, useDB } from '../lib/db'
-import { labelPeran, masuk, masukSebagai } from '../lib/auth'
+import { CheckCircle2, KeyRound, School, ShieldCheck, Lock, Loader2, Database } from 'lucide-react'
+import { Brand, Button, Card, Page, Pesan, TopBar, berandaPeran, cx } from '../components/ui'
+import { getDB, sekolahById, useDB } from '../lib/db'
+import { daftar, labelPeran, masuk, masukSebagai } from '../lib/auth'
+import { modeOnline } from '../lib/supabase'
 import type { Peran, Undangan } from '../lib/types'
 
-const tujuan = (peran: Peran) => (peran === 'sppg' ? '/mitra/sppg' : '/app')
+const tujuan = (peran: Peran) => berandaPeran({ peran } as never)
 
-const input = 'h-12 w-full rounded-xl border border-line bg-white px-3 text-[15px] outline-none focus:border-leaf'
+const input = 'h-12 w-full rounded-xl border border-line bg-white px-3 text-[16px] outline-none focus:border-leaf focus:ring-2 focus:ring-leaf/15'
 
 export function Masuk() {
   const nav = useNavigate()
@@ -17,14 +18,19 @@ export function Masuk() {
   const [u, setU] = useState('')
   const [pin, setPin] = useState('')
   const [err, setErr] = useState('')
+  const [sibuk, setSibuk] = useState('')
 
-  const kirim = (e: React.FormEvent) => {
-    e.preventDefault()
-    const r = masuk(u, pin)
+  const lanjut = (r: Awaited<ReturnType<typeof masuk>>) => {
     if (!r.ok) return setErr(r.pesan)
-    nav(params.get('ke') === 'profil' && r.user!.peran !== 'sppg' ? '/app/profil' : tujuan(r.user!.peran))
+    nav(params.get('ke') === 'profil' && !['sppg', 'kesehatan'].includes(r.user!.peran) ? '/app/profil' : tujuan(r.user!.peran))
+  }
+  const kirim = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setErr(''); setSibuk('form')
+    try { lanjut(await masuk(u, pin)) } finally { setSibuk('') }
   }
   const demo = d.pengguna.filter((p) => p.demo)
+  const grup: [string, Peran[]][] = [['Pelapor', ['ortu', 'siswa', 'guru']], ['Petugas sekolah (verifikasi & eskalasi)', ['petugas']], ['Mitra penanganan', ['sppg', 'kesehatan']]]
 
   return (
     <>
@@ -42,25 +48,31 @@ export function Masuk() {
             <span className="mb-1 block text-sm font-semibold text-ink">PIN 6 digit</span>
             <input className={input} value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))} inputMode="numeric" type="password" autoComplete="current-password" placeholder="••••••" />
           </label>
-          {err && <p role="alert" className="rounded-lg bg-brick-soft px-3 py-2 text-sm font-semibold text-brick">{err}</p>}
-          <Button type="submit" className="w-full" disabled={!u || pin.length !== 6}>Masuk</Button>
+          {err && <Pesan jenis="galat">{err}</Pesan>}
+          <Button type="submit" className="w-full" disabled={!u || pin.length !== 6 || !!sibuk}>{sibuk === 'form' && <Loader2 size={18} className="animate-spin" />}{sibuk === 'form' ? 'Memeriksa…' : 'Masuk'}</Button>
         </form>
         <p className="mt-2 flex items-center gap-1 text-xs text-muted"><Lock size={12} /> PIN salah 5 kali, akun dikunci 15 menit.</p>
         <Link to="/daftar" className="mt-4 flex h-12 items-center justify-center rounded-xl border border-line bg-white font-bold text-ink hover:border-leaf">Belum punya akun? Daftar</Link>
 
         <Card className="mt-6">
           <p className="text-sm font-bold text-ink">Akun demo untuk juri</p>
-          <p className="text-xs text-muted">Sekali ketuk, tanpa mengetik PIN (PIN semua akun demo: 123456).</p>
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            {demo.map((p) => (
-              <button key={p.id} onClick={() => { masukSebagai(p); nav(tujuan(p.peran)) }} className="rounded-lg border border-line px-3 py-2 text-left hover:border-leaf">
-                <span className="block text-[13px] font-bold text-ink">{labelPeran[p.peran].split(' / ')[0]}{p.schoolId ? ` ${sekolahById(d, p.schoolId)?.jenjang}` : ''}</span>
-                <span className="block truncate text-[11px] text-muted">{p.username}</span>
-              </button>
-            ))}
-          </div>
+          <p className="text-xs text-muted">Sekali ketuk (PIN semua akun demo: 123456).</p>
+          {grup.map(([judul, peran]) => (
+            <div key={judul} className="mt-3">
+              <p className="text-[11px] font-bold uppercase tracking-wide text-muted">{judul}</p>
+              <div className="mt-1.5 grid grid-cols-2 gap-2">
+                {demo.filter((p) => peran.includes(p.peran)).map((p) => (
+                  <button key={p.id} disabled={!!sibuk} onClick={async () => { setErr(''); setSibuk(p.id); try { lanjut(await masukSebagai(p)) } finally { setSibuk('') } }} className="min-h-[52px] rounded-lg border border-line px-3 py-2 text-left hover:border-leaf disabled:opacity-60">
+                    <span className="flex items-center gap-1 text-[13px] font-bold text-ink">{sibuk === p.id && <Loader2 size={13} className="animate-spin" />}{labelPeran[p.peran].split(' / ')[0].replace(' (puskesmas)', '')}{p.schoolId ? ` ${sekolahById(d, p.schoolId)?.jenjang}` : ''}</span>
+                    <span className="block truncate text-[11px] text-muted">{p.username}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
         </Card>
-        <p className="mt-4 text-center text-xs text-muted">SPPG dan fasilitas kesehatan masuk dengan ID mitra yang diverifikasi.</p>
+        <p className="mt-3 flex items-start gap-1.5 text-xs text-muted"><Database size={13} className="mt-0.5 shrink-0" />{modeOnline ? 'Mode online: data tersimpan di server (Supabase).' : 'Mode demo: data contoh tersimpan di browser ini, belum di server.'}</p>
+        <p className="mt-4 text-center text-xs text-muted">SPPG dan pihak kesehatan masuk dengan ID mitra yang diverifikasi.</p>
       </Page>
     </>
   )
@@ -74,6 +86,7 @@ export function Daftar() {
   const [peran, setPeran] = useState<Peran | null>(null)
   const [f, setF] = useState({ wa: '', nama: '', anak: '', waOrtu: '', pin: '', setuju: false })
   const [err, setErr] = useState('')
+  const [sibuk, setSibuk] = useState(false)
 
   const sekolah = und ? sekolahById(getDB(), und.schoolId) : undefined
   const pilihanPeran: Peran[] = !und || !sekolah ? [] : und.tipe === 'staf' ? ['guru', 'petugas'] : ['PAUD', 'SD', 'SLB'].includes(sekolah.jenjang) ? ['ortu'] : ['siswa']
@@ -84,16 +97,18 @@ export function Daftar() {
     if (!u) return setErr('Kode tidak dikenali. Minta kode ke wali kelas atau kepala sekolah.')
     setErr(''); setUnd(u); setLangkah(2)
   }
-  const kirim = (e: React.FormEvent) => {
+  const kirim = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!/^08\d{8,11}$/.test(f.wa)) return setErr('Nomor WhatsApp harus diawali 08 dan berisi 10–13 angka.')
     if (f.pin.length !== 6) return setErr('PIN harus 6 angka.')
     if (peran === 'siswa' && !/^08\d{8,11}$/.test(f.waOrtu)) return setErr('Isi nomor WhatsApp orang tua dengan benar.')
     if (!f.setuju) return setErr('Centang persetujuan penggunaan data terlebih dahulu.')
-    const r = daftarPengguna({ username: f.wa, pin: f.pin, nama: f.nama || 'Pengguna', peran: peran!, schoolId: und!.schoolId, kelas: und!.kelas, anak: f.anak || undefined, waOrtu: f.waOrtu || undefined })
-    if (!r.ok) return setErr(r.pesan)
-    masukSebagai(r.user!)
-    nav('/app')
+    setSibuk(true)
+    try {
+      const r = await daftar({ username: f.wa, pin: f.pin, nama: f.nama || 'Pengguna', peran: peran!, schoolId: und!.schoolId, kelas: und!.kelas, anak: f.anak || undefined, waOrtu: f.waOrtu || undefined }, und!.kode)
+      if (!r.ok) return setErr(r.pesan)
+      nav('/app')
+    } finally { setSibuk(false) }
   }
 
   return (
@@ -177,10 +192,10 @@ export function Daftar() {
               <input type="checkbox" className="mt-1 h-4 w-4 accent-leaf" checked={f.setuju} onChange={(e) => setF({ ...f, setuju: e.target.checked })} />
               <span><ShieldCheck size={14} className="mr-1 inline text-leaf" />Saya setuju data dipakai untuk pemantauan MBG. Nama saya dan nama anak tidak ditampilkan ke publik.</span>
             </label>
-            {err && <p role="alert" className="rounded-lg bg-brick-soft px-3 py-2 text-sm font-semibold text-brick">{err}</p>}
+            {err && <Pesan jenis="galat">{err}</Pesan>}
             <div className="flex gap-2">
               <Button type="button" variant="outline" onClick={() => setLangkah(2)} className="w-24">Kembali</Button>
-              <Button type="submit" className="flex-1">Buat akun</Button>
+              <Button type="submit" className="flex-1" disabled={sibuk}>{sibuk && <Loader2 size={18} className="animate-spin" />}Buat akun</Button>
             </div>
           </form>
         )}
